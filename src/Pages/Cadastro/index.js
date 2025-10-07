@@ -5,49 +5,40 @@ import styled, { withTheme } from 'styled-components/native';
 
 import logo from '../../assets/Logo.png';
 import vector from '../../assets/Vector.png';
-import checkboxTrue from '../../assets/Checkbox.png'
-import checkboxFalse from '../../assets/Subtract.png'
+
 import error from '../../assets/Error icon.png'
-import visualizar from '../../assets/Vector (1).png'
+import olho from '../../assets/Vector (1).png'
 
 import { useNavigation } from '@react-navigation/native';
 
-export default function Login(){
+export default function Cadastro(){
 
 const navigation = useNavigation();
 
-const [selecionado, setSelecionado] = useState(null);
 const [email, setEmail] = useState('');
 const [senha, setSenha] = useState('');
+const [nome, setNome] = useState('');
+const [confirmaSenha, setConfirmaSenha] = useState('');
+const [visualizarSenha, setVisualizarSenha] = useState(true);
+const [visualizarConfirmaSenha, setVisualizarConfirmaSenha] = useState(true);
 
 const [mensagem, setMensagem] = useState('');
 
-const handleSelect = () => {
-        setSelecionado(!selecionado); 
-    };
+const mostrarSenha = () => {
+    setVisualizarSenha(false)
+}
 
-    const USUARIO_TESTE = 'breno@gmail.com';
-    const SENHA_TESTE = '12345';
-    
-    // Função principal de Login
-    const handleLogin = () => {
-        // 1. Validação básica (campos vazios)
-        if (!email.trim() || !senha.trim()) {
-            setMensagem("Por favor, preencha todos os campos.");
-            return;
-        }
-        setTimeout(() => {
+const naoMostrarSenha = () => {
+    setVisualizarSenha(true)
+}
 
-            if (email === USUARIO_TESTE && senha === SENHA_TESTE) {
-                setMensagem('');
-                Alert.alert("Sucesso", "Login simulado OK! Redirecionando...");
-                navigation.navigate('Home')
-            } else {
-                setMensagem("E-mail ou senha inválidos. Tente novamente.")
-            }
-        }, 2000); // Espera 2000ms (2 segundos)
-    };
+const mostrarConfirmaSenha = () => {
+    setVisualizarConfirmaSenha(false)
+}
 
+const naoMostrarConfirmaSenha = () => {
+    setVisualizarConfirmaSenha(true)
+}
     return(
 
     <Background>
@@ -56,15 +47,14 @@ const handleSelect = () => {
                 <Image source={vector} style={{width:8, height:16}}></Image>
             </TouchableOpacity>
             <View style={{gap:8, flexDirection:'row'}}>
-                <MiniTexto style={{color:'#F0F2F5', alignSelf:'center', marginTop:4}}> Não tem conta ainda? </MiniTexto>
-                <BotaoCadastrar onPress={ () => navigation.navigate('Cadastro') }>
-                    <Texto style={{color:'#F0F2F5'}}>Cadastre-se</Texto>
-                </BotaoCadastrar>
+                <MiniTexto style={{color:'#F0F2F5', alignSelf:'center', marginTop:4}}> Já tem conta? </MiniTexto>
+                <BotaoLogin onPress={ () => navigation.navigate('Login') }>
+                    <Texto style={{color:'#F0F2F5'}}>Login</Texto>
+                </BotaoLogin>
             </View>
         </View>
         <ContainerLogo style={{flexDirection:'row', width:249, height:86, justifyContent:'center'}}> 
             <Image source={logo} style={{width:80, height:80,resizeMode:'contain'}}></Image>
-            
             {/* Novo View para agrupar 'Fin' e 'Track' lado a lado do logo */}
             <View style={{flexDirection: 'column', justifyContent: 'center', gap:-50}}>
                 <TextoLogo style={{color:'#FFFFFF'}}>
@@ -85,10 +75,10 @@ const handleSelect = () => {
                     
                     <View style={{alignItems:'center', gap:5, paddingTop:50}}>
                         <SubTitulo style={{textAlign:'center'}}>
-                            Seja bem vindo de volta!
+                            Seja bem vindo!
                         </SubTitulo>
                         <MiniTexto>
-                            Preencha as informações
+                            Se junte a nós e tenha controle do seu dinheiro.
                         </MiniTexto>
                     </View>
 
@@ -107,6 +97,18 @@ const handleSelect = () => {
 
                         <LabelInput>
                             <MiniTexto style={{marginBottom:-12}}>
+                                Nome
+                            </MiniTexto>
+                            <TextoInput 
+                                placeholder='Digite aqui'
+                                value={nome}
+                                onChangeText={setNome}
+                                >
+                            </TextoInput>
+                        </LabelInput>
+
+                        <LabelInput>
+                            <MiniTexto style={{marginBottom:-12}}>
                                 Senha
                             </MiniTexto>
                             <View style={{flexDirection:'row'}}>
@@ -114,11 +116,30 @@ const handleSelect = () => {
                                     placeholder='Digite aqui'
                                     value={senha}
                                     onChangeText={setSenha}
-                                    secureTextEntry={true}
+                                    secureTextEntry={visualizarSenha}
                                     >
                                 </TextoInput>
-                                <TouchableOpacity style={{position: 'absolute',right: 10}}>
-                                    <Image source={visualizar} style={{marginTop:0}}>
+                                <TouchableOpacity style={{position: 'absolute',right: 10}} onPressIn={mostrarSenha} onPressOut={naoMostrarSenha}>
+                                    <Image source={olho} style={{marginTop:0}}>
+                                    </Image>
+                                </TouchableOpacity>
+                            </View>
+                        </LabelInput>
+
+                        <LabelInput>
+                            <MiniTexto style={{marginBottom:-12}}>
+                                Confirme a senha 
+                            </MiniTexto>
+                            <View style={{flexDirection:'row'}}>
+                                <TextoInput 
+                                    placeholder='Digite aqui'
+                                    value={confirmaSenha}
+                                    onChangeText={setConfirmaSenha}
+                                    secureTextEntry={visualizarConfirmaSenha}
+                                    >
+                                </TextoInput>
+                                <TouchableOpacity style={{position: 'absolute',right: 10}} onPressIn={mostrarConfirmaSenha} onPressOut={naoMostrarConfirmaSenha}>
+                                    <Image source={olho} style={{marginTop:0}}>
                                     </Image>
                                 </TouchableOpacity>
                             </View>
@@ -137,34 +158,20 @@ const handleSelect = () => {
                             </View>
                         )}
 
-                        <MiniTexto style={{alignSelf:'flex-end'}}>
-                            Esqueceu a senha?
-                        </MiniTexto>
-
                         <BotaoGradientBackground>
                             <ButtonTouchable>
-                                <ButtonText onPress={handleLogin}>
-                                    Confirmar
+                                <ButtonText>
+                                    Cadastrar
                                 </ButtonText>
                             </ButtonTouchable>
                         </BotaoGradientBackground>
                         
-                        <View style={{flexDirection:'row', gap:5, alignItems:'center', borderRadius:2}}>
-                            <TouchableOpacity onPress={handleSelect}>
-                                <Image source={selecionado ? checkboxTrue : checkboxFalse} style={{width:12, height:12, resizeMode:'contain', marginBottom:1.8, marginLeft:3 }}></Image>
-                            </TouchableOpacity>
-                            <MiniTexto>
-                                Continuar conectado
-                            </MiniTexto>
-                        </View>
 
                     </View>
                 </View>
             </Card>
     </Background>
-
     )
-
 }
 
 
@@ -176,7 +183,7 @@ letter-spacing: 0;
 const ContainerLogo = styled.View`
 width: 249px;
 height: 86px;
-top: 50px;
+top: 30px;
 left: 70px;
 gap: 20px;
 angle: 0 deg;
@@ -184,7 +191,7 @@ opacity: 1;
 `
 const Card = styled.View`
 width: 100%;
-height: 480px;
+height: 540px;
 gap: 32px;
 angle: 0 deg;
 opacity: 1;
@@ -201,7 +208,7 @@ background: #FFFFFF;
 `
 const BackCard = styled.View`
 width: 320;
-height: 480px;
+height: 540px;
 angle: 0 deg;
 opacity: 1;
 border-top-left-radius: 32px;
@@ -211,8 +218,8 @@ bottom: 13;
 background: #F0F2F580;
 zIndex:0;
 `
-const BotaoCadastrar = styled.TouchableOpacity`
-width: 102;
+const BotaoLogin = styled.TouchableOpacity`
+width: 49;
 height: 29;
 gap: 10px;
 angle: 0 deg;
@@ -223,5 +230,6 @@ padding-bottom: 4px;
 padding-left: 6px;
 border-radius: 6px;
 background: #FFFFFF33;
-backdrop-filter: blur(100px);
+backdrop-filter: blur(100px)
+
 `
