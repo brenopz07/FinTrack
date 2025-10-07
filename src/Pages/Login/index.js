@@ -5,14 +5,10 @@ import styled from 'styled-components/native';
 import logo from '../../assets/Logo.png'
 import image2 from '../../assets/image 2.png'
 
-import { useNavigation } from '@react-navigation/native';
-
-
 
 export default function Inicial(){
-    const navigation = useNavigation();
-    
-    return( 
+    return(
+
     <Background>
         <ContainerLogo style={{flexDirection:'row', width:249, height:86}}> 
             <Image source={logo} style={{width:80, height:80,resizeMode:'contain'}}></Image>
@@ -44,7 +40,7 @@ export default function Inicial(){
                         </SubTitulo>
                     </View>
                         <BotaoGradientBackground style={{marginTop:31}}>
-                            <ButtonTouchable onPress={ () => navigation.navigate('Login') }>
+                            <ButtonTouchable>
                                 <ButtonText>
                                     Comece agora
                                 </ButtonText>
