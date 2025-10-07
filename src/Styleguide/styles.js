@@ -47,7 +47,6 @@ export const MiniTexto = styled.Text`
   font-size: 12px;
 `;
 
-
 export const Container = styled.View`
 width: 390;
 height: 601;
@@ -98,3 +97,4 @@ export const ButtonText = styled.Text`
   font-family: 'Poppins_SemiBold';
   font-size: 20px;
 `;
+

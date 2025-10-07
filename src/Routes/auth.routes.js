@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import Inicial from '../Pages/Inicial';
 
+
 const AuthStack = createNativeStackNavigator();
 
 function AuthRoutes(){
