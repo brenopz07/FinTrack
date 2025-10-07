@@ -3,7 +3,7 @@
 // ===========================================
 import { LinearGradient } from 'expo-linear-gradient';
 import styled from 'styled-components/native';
-import { Text,Button, TouchableOpacity } from 'react-native'; // Importa o Text padrão para ser estilizado
+import { Text,Button, TouchableOpacity, TextInput } from 'react-native'; // Importa o Text padrão para ser estilizado
 
 const GRADIENT_COLORS = {
   blue: '#4285F4', // Início (Esquerda)
@@ -98,3 +98,22 @@ export const ButtonText = styled.Text`
   font-size: 20px;
 `;
 
+export const LabelInput = styled.View`
+width: 330px;
+height: 56px;
+justify-content: space-between;
+angle: 0 deg;
+opacity: 1;
+border-width: 2px;
+border-radius: 12px;
+padding: 10px;
+border: 2px #F0F2F5;
+`
+
+export const TextoInput = styled.TextInput`
+color: #262626;
+font-family: 'Poppins_Regular';
+font-size: 14px;
+height: 42;
+margin-left:-4;
+`

@@ -30,7 +30,7 @@ export default function Inicial(){
         </ContainerLogo>
             
 
-            <BackCard style={{backgroundColor:'#F0F2F580', zIndex:0,alignSelf:'center'}}>    
+            <BackCard style={{backgroundColor:'#F0F2F580', alignSelf:'center'}} >    
             </BackCard>
             <Card style={{backgroundColor:'#FFFFFF'}}>
                 <View style={{alignItems:'center'}}>
@@ -100,4 +100,5 @@ border-top-right-radius: 32px;
 marginBottom:30px;
 position:absolute;
 bottom:0;
+zIndex:0;
 `
