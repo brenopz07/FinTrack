@@ -7,7 +7,7 @@ import logo from '../../assets/Logo.png';
 import vector from '../../assets/Vector.png';
 
 import error from '../../assets/Error icon.png'
-import olho from '../../assets/Vector (1).png'
+import olho from '../../assets/olho.png'
 
 import { useNavigation } from '@react-navigation/native';
 

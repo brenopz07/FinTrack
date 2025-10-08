@@ -44,7 +44,7 @@ export default function Inicial(){
                         </SubTitulo>
                     </View>
                         <BotaoGradientBackground style={{marginTop:31}}>
-                            <ButtonTouchable onPress={ () => navigation.navigate('Login') }>
+                            <ButtonTouchable onPress={ () => navigation.navigate('Home') }>
                                 <ButtonText>
                                     Comece agora
                                 </ButtonText>

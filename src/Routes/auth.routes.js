@@ -4,12 +4,20 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Inicial from '../Pages/Inicial';
 import Login from '../Pages/Login';
 import Cadastro from '../Pages/Cadastro';
+import Home from '../Pages/Home';
 
 const AuthStack = createNativeStackNavigator();
 
 function AuthRoutes(){
   return(
     <AuthStack.Navigator>
+      <AuthStack.Screen 
+        name="Home"
+        component={Home}
+        options={{
+          headerShown: false,
+        }}
+      />
       <AuthStack.Screen 
         name="Inicial"
         component={Inicial}
@@ -31,6 +39,7 @@ function AuthRoutes(){
           headerShown: false,
         }}
       />
+      
     </AuthStack.Navigator>
   )
 }

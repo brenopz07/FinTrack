@@ -10,7 +10,7 @@ import vector from '../../assets/Vector.png';
 import checkboxTrue from '../../assets/Checkbox.png'
 import checkboxFalse from '../../assets/Subtract.png'
 import error from '../../assets/Error icon.png'
-import visualizar from '../../assets/Vector (1).png'
+import visualizar from '../../assets/olho.png'
 
 import { useNavigation } from '@react-navigation/native';
 
