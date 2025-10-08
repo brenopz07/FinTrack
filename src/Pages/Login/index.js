@@ -3,6 +3,8 @@ import { View, Image, TouchableOpacity, Alert } from 'react-native';
 import { Background, BotaoGradientBackground, ButtonText, ButtonTouchable,  LabelInput,  MiniTexto, SubTitulo, Texto, TextoInput} from '../../Styleguide/styles';
 import styled, { withTheme } from 'styled-components/native';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import logo from '../../assets/Logo.png';
 import vector from '../../assets/Vector.png';
 import checkboxTrue from '../../assets/Checkbox.png'
@@ -22,31 +24,57 @@ const [senha, setSenha] = useState('');
 
 const [mensagem, setMensagem] = useState('');
 
+const[visualizarSenha, setVisualizarSenha] = useState(true);
+
+const mostrarSenha = () => {
+    setVisualizarSenha(false)
+}
+
+const naoMostrarSenha = () => {
+    setVisualizarSenha(true)
+}
+
 const handleSelect = () => {
         setSelecionado(!selecionado); 
     };
-
-    const USUARIO_TESTE = 'breno@gmail.com';
-    const SENHA_TESTE = '12345';
     
     // Função principal de Login
-    const handleLogin = () => {
-        // 1. Validação básica (campos vazios)
-        if (!email.trim() || !senha.trim()) {
-            setMensagem("Por favor, preencha todos os campos.");
-            return;
-        }
-        setTimeout(() => {
+ const handleLogin = async () => {
+    if (!email || !senha) {
+      setMensagem('Preencha todos os campos');
+      return;
+    }
 
-            if (email === USUARIO_TESTE && senha === SENHA_TESTE) {
-                setMensagem('');
-                Alert.alert("Sucesso", "Login simulado OK! Redirecionando...");
-                navigation.navigate('Home')
-            } else {
-                setMensagem("E-mail ou senha inválidos. Tente novamente.")
-            }
-        }, 2000); // Espera 2000ms (2 segundos)
-    };
+    try {
+      // Busca os usuários cadastrados
+      const usuariosSalvos = await AsyncStorage.getItem('usuarios');
+      const usuarios = usuariosSalvos ? JSON.parse(usuariosSalvos) : [];
+      // Verifica se existe o usuário com email e senha corretos
+      const usuarioEncontrado = usuarios.find(
+        (u) => u.email === email && u.senha === senha
+      );
+      console.log(usuarioEncontrado)
+      if (!usuarioEncontrado) {
+        setMensagem('Email ou senha incorretos');
+        return;
+      }
+
+      // Salva o usuário logado (opcional, para manter sessão)
+      await AsyncStorage.setItem('usuarioLogado', JSON.stringify(usuarioEncontrado));
+
+      Alert.alert('Sucesso', `Bem-vindo, ${usuarioEncontrado.nome}!`);
+      console.log('Usuário logado:', usuarioEncontrado);
+      navigation.navigate('Home');
+      // Aqui você pode redirecionar para outra tela (ex: home)
+      // navigation.navigate('Home');
+
+      setEmail('');
+      setSenha('');
+    } catch (error) {
+      console.log('Erro no login:', error);
+      Alert.alert('Erro', 'Não foi possível fazer login');
+    }
+  };
 
     return(
 
@@ -114,10 +142,10 @@ const handleSelect = () => {
                                     placeholder='Digite aqui'
                                     value={senha}
                                     onChangeText={setSenha}
-                                    secureTextEntry={true}
+                                    secureTextEntry={visualizarSenha}
                                     >
                                 </TextoInput>
-                                <TouchableOpacity style={{position: 'absolute',right: 10}}>
+                                <TouchableOpacity style={{position: 'absolute',right: 10}} onPressIn={mostrarSenha} onPressOut={naoMostrarSenha}>
                                     <Image source={visualizar} style={{marginTop:0}}>
                                     </Image>
                                 </TouchableOpacity>

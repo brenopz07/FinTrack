@@ -11,6 +11,8 @@ import olho from '../../assets/Vector (1).png'
 
 import { useNavigation } from '@react-navigation/native';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 export default function Cadastro(){
 
 const navigation = useNavigation();
@@ -19,6 +21,7 @@ const [email, setEmail] = useState('');
 const [senha, setSenha] = useState('');
 const [nome, setNome] = useState('');
 const [confirmaSenha, setConfirmaSenha] = useState('');
+
 const [visualizarSenha, setVisualizarSenha] = useState(true);
 const [visualizarConfirmaSenha, setVisualizarConfirmaSenha] = useState(true);
 
@@ -39,6 +42,53 @@ const mostrarConfirmaSenha = () => {
 const naoMostrarConfirmaSenha = () => {
     setVisualizarConfirmaSenha(true)
 }
+
+
+  const handleCadastro = async () => {
+        if (!email.trim() || !senha.trim() || !confirmaSenha.trim() || !nome.trim()) {
+            setMensagem("Por favor, preencha todos os campos.");
+            return;
+        }if (senha !== confirmaSenha) {
+                setMensagem('As senhas não coincidem');
+            return;}
+        if (senha.length < 6 && senha.length > 1){
+            setMensagem("A senha deve ter no mínimo 6 caracteres.");
+            return;
+        }else{
+         try {
+      // Pegar usuários cadastrados
+      const usuariosSalvos = await AsyncStorage.getItem('usuarios');
+      const usuarios = usuariosSalvos ? JSON.parse(usuariosSalvos) : [];
+      // Checar se o email já existe
+      const emailExistente = usuarios.find(u => u.email === email);
+      if (emailExistente) {
+        setMensagem('Este email já está cadastrado');
+        return;
+      }
+
+      // Adicionar novo usuário
+      const novoUsuario = { nome, email, senha };
+      usuarios.push(novoUsuario);
+
+      // Salvar no AsyncStorage
+      await AsyncStorage.setItem('usuarios', JSON.stringify(usuarios));
+      const usuariosAtualizados = await AsyncStorage.getItem('usuarios');
+      console.log('Usuários atualizados:', JSON.parse(usuariosAtualizados));
+      Alert.alert('Sucesso', 'Cadastro realizado com sucesso!');
+      navigation.navigate("Login")
+      // Limpar campos
+      setNome('');
+      setEmail('');
+      setSenha('');
+      setConfirmaSenha('');
+
+    } catch (error) {
+      console.log(error);
+      Alert.alert('Erro', 'Não foi possível salvar o cadastro');
+    }
+    }
+  };
+
     return(
 
     <Background>
@@ -109,7 +159,7 @@ const naoMostrarConfirmaSenha = () => {
 
                         <LabelInput>
                             <MiniTexto style={{marginBottom:-12}}>
-                                Senha
+                                Senha 
                             </MiniTexto>
                             <View style={{flexDirection:'row'}}>
                                 <TextoInput 
@@ -146,12 +196,10 @@ const naoMostrarConfirmaSenha = () => {
                         </LabelInput>
 
                         {mensagem !== '' && (
-                            <View style={{flexDirection:'row',position: 'absolute',bottom: 118,left: 4, gap:3}}>
-                                <Image source={error} style={{width:11, height:11, resizeMode:'contain', marginTop:3}}></Image>               
+                            <View style={{flexDirection:'row',position: 'absolute',left: 4, gap:3, bottom:340}}>
+                                <Image source={error} style={{width:11, height:11, resizeMode:'contain', marginTop:4}}></Image>               
                                 <MiniTexto
-                                style={{
-                                    color: 'red',
-                                }}
+                                style={{color: 'red'}}
                                 >
                                 {mensagem}
                                 </MiniTexto>
@@ -159,7 +207,7 @@ const naoMostrarConfirmaSenha = () => {
                         )}
 
                         <BotaoGradientBackground>
-                            <ButtonTouchable>
+                            <ButtonTouchable onPress={handleCadastro}>
                                 <ButtonText>
                                     Cadastrar
                                 </ButtonText>
