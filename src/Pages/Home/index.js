@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Image, Text,Platform, ScrollView } from 'react-native';
+import { View, Image, Text,Platform, ScrollView, TextInput, TouchableOpacity } from 'react-native';
 import { Background, BotaoGradientBackground, ButtonText, ButtonTouchable,  MiniTexto, SubTitulo, Texto, Titulo} from '../../Styleguide/styles';
 import styled from 'styled-components/native';
 import logo from '../../assets/Logo (1).png';
@@ -7,7 +7,8 @@ import user from '../../assets/user.png';
 import olho from '../../assets/olhobranco.png';
 import addDespesa from '../../assets/addDespesa.png';
 import addReceita from '../../assets/addReceita.png';
-
+import lupa from '../../assets/lupa.png';
+import filtro from '../../assets/filtro.png'
 
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -35,7 +36,9 @@ export default function Home(){
                     <Image source={logo} style={{width:28, height:28, resizeMode:'contain'}}></Image>
                     <SubTitulo style={{paddingLeft:8, color:'#4285F4'}}>FinTrack</SubTitulo>
                 </View>
-                <Image source={user} style={{alignSelf:'end',resizeMode:'contain'}}></Image>
+                <TouchableOpacity>
+                    <Image source={user} style={{alignSelf:'end',resizeMode:'contain'}}></Image>
+                </TouchableOpacity>
             </View>
             <Card style={{alignSelf:'center'}}>
                 <View style={{flexDirection:'row', gap:10}}>
@@ -62,10 +65,21 @@ export default function Home(){
                     </BotaoAdd>
                 </View>
             </Card>
-        <MesesScroll
+            <MesesScroll
                 mesSelecionado={mesSelecionado}
                 handleMesSelecionado={handleMesSelecionado}
                 TextoComponent={Texto} />
+
+            <ContainerSearch>
+                <SearchBar>
+                    <Image source={lupa}></Image>
+                    <TextInput style={{marginBottom:-3}}
+                        placeholder='Pesquisa...'>
+                    </TextInput>
+                </SearchBar>
+                <TouchableOpacity><Image source={filtro} style={{width:20, height:15, resizeMode:'contain', marginBottom:3}}></Image></TouchableOpacity>
+            </ContainerSearch>
+            
         </View>
     </View>
 
@@ -110,28 +124,33 @@ ${Platform.OS === 'ios' && `
 /* Android: Usa elevation */
 ${Platform.OS === 'android' && `
     elevation: 4; /* Valor para simular a elevação/sombra */
-`}
-`
-const Seletor = styled.TouchableOpacity`
-width: 75;
-height: 27;
-gap: 16px;
-angle: 0 deg;
-opacity: 1;
-border-radius: 999px;
-padding-top: 3px;
-padding-right: 10px;
-padding-bottom: 3px;
-padding-left: 10px;
-align-items:center;
-background-color: ${props => (props.isSelected ? '#4285F4' : 'white')};
-`
-const Divisor = styled.View`
-width: 0;
-height: 25px;
-angle: 10 deg;
-opacity: 1;
-border-width: 2px;
-border: 2px; 
-border: #F0F2F5;
+`}`
+
+
+const SearchBar = styled.View`
+    flex-direction: row;
+    align-items: center;
+    height: 37px; 
+    background-color: white;
+    border-radius: 999px; 
+    border-width: 2px;
+    border-color: #F0F2F5;
+    width:294;
+    padding-left:12;
+    gap:12;
+`;
+
+const ContainerSearch = styled.View`
+    flex-direction:row;
+    align-items:center;
+    gap:8;
+    width: 330;
+    height: 37;
+    gap: 8px;
+    angle: 0 deg;
+    opacity: 1;
+    padding-right: 8px;
+    margin-horizontal:40;
+    margin-top:30
+
 `

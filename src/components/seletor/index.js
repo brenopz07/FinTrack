@@ -36,7 +36,7 @@ const BotaoMes = styled.TouchableOpacity.attrs(props => ({
 `;
 
 // Estilo do Divisor
-const DivisorStyled = styled.View`
+const Divisor = styled.View`
     width: 1px;
     height: 100%; 
     background-color: #F0F2F5; /* Cor do divisor */
@@ -77,7 +77,7 @@ export function MesesScroll({ mesSelecionado, handleMesSelecionado, TextoCompone
                         </BotaoMes>
 
                         {/* 2. Divisor Condicional */}
-                        {mes === "Geral" && <DivisorStyled />}
+                        {mes === "Geral" && <Divisor />}
                     </React.Fragment>
                 );
             })}
