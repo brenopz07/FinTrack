@@ -23,16 +23,18 @@ const BotaoMes = styled.TouchableOpacity.attrs(props => ({
     activeOpacity: 0.7,
 }))`
     width: auto; /* Deixei auto para se ajustar ao conteúdo */
-    height: 27px;
+    height: 28px;
     border-radius: 999px;
     padding: 3px 10px;
     align-items: center;
     justify-content: center;
-    
     border-width: 1px;
     border-color: ${props => (props.isSelected ? 'transparent' : '#F0F2F5')};
 
     background-color: ${props => (props.isSelected ? '#4285F4' : 'white')};
+
+    elevation: ${props => (props.isSelected ? 4 : 0)};
+    
 `;
 
 // Estilo do Divisor

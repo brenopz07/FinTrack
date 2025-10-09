@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Image, Text,Platform, ScrollView, TextInput, TouchableOpacity } from 'react-native';
+import { View, Image, Text,Platform, ScrollView, TextInput, TouchableOpacity, FlatList } from 'react-native';
 import { Background, BotaoGradientBackground, ButtonText, ButtonTouchable,  MiniTexto, SubTitulo, Texto, Titulo} from '../../Styleguide/styles';
 import styled from 'styled-components/native';
 import logo from '../../assets/Logo (1).png';
@@ -17,6 +17,9 @@ import { MesesScroll } from '../../components/seletor';
 
 
 import { meses } from '../../components/seletor';
+
+import { financas } from '../../data/financas';
+import ListaTransacoes from '../../components/lista_financas';
 
 export default function Home(){
     const navigation = useNavigation();
@@ -65,6 +68,7 @@ export default function Home(){
                     </BotaoAdd>
                 </View>
             </Card>
+
             <MesesScroll
                 mesSelecionado={mesSelecionado}
                 handleMesSelecionado={handleMesSelecionado}
@@ -81,6 +85,17 @@ export default function Home(){
             </ContainerSearch>
             
         </View>
+        <View style={{flexDirection:'row', justifyContent:'space-between', marginTop:16, marginHorizontal: 40}}>
+            <MiniTexto style={{color:'#595959'}}>Informações</MiniTexto>
+            <View style={{flex: 1, flexDirection:'row', justifyContent:'flex-end', gap: 30}}> 
+                <MiniTexto style={{color:'#595959'}}>Valor</MiniTexto>
+                <MiniTexto style={{color:'#595959'}}>Categoria</MiniTexto>
+            </View>
+        </View>
+
+        <ListaTransacoes data={financas}/>
+        
+
     </View>
 
     )
@@ -154,3 +169,44 @@ const ContainerSearch = styled.View`
     margin-top:30
 
 `
+
+const Container = styled.View`
+width: 330;
+height: 495;
+angle: 0 deg;
+opacity: 1;
+margin-horizontal:40;
+margin-bottom:15;
+`;
+
+const CardLista = styled.View`
+flex-direction:row;
+margin-top:12;
+justify-content:space-between;
+height:60;
+width: 330;
+height: 60;
+gap: 8px;
+angle: 0 deg;
+opacity: 1;
+padding-top: 12px;
+padding-bottom: 12px;
+border-bottom-width: 1px;
+border-bottom: 1px;
+border-color: #F0F2F5;
+`;
+
+const Categoria = styled.View`
+flex-direction:row;
+width: 82.5;
+height: 21;
+gap: 2px;
+border-radius: 999px;
+padding-top: 3px;
+padding-right: 6px;
+padding-bottom: 3px;
+padding-left: 4.5px;
+align-items:center;
+margin-right:0;
+`;
+
