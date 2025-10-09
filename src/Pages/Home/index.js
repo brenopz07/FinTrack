@@ -22,7 +22,19 @@ import { financas } from '../../data/financas';
 import ListaTransacoes from '../../components/lista_financas';
 
 export default function Home(){
-    const navigation = useNavigation();
+
+    const totalReceitas = financas
+    .filter(item => item.tipo === 'receita') // Filtra apenas as receitas
+    .reduce((acumulador, item) => acumulador + item.valor, 0); // Soma os valores
+
+    const totalDespesas = financas
+        .filter(item => item.tipo === 'despesa') // Filtra apenas as despesas
+        .reduce((acumulador, item) => acumulador + item.valor, 0); // Soma os valores
+
+    const saldoFinal = totalReceitas - totalDespesas;
+    const ValorInteiro = Math.floor(saldoFinal);
+    const Centavos = Math.round((saldoFinal-ValorInteiro)*100).toString().padStart(2, '0');;
+
 
     const [mesSelecionado, setMesSelecionado] = useState(meses[0]);
     
@@ -51,7 +63,7 @@ export default function Home(){
                     <Image source={olho} style={{resizeMode:'contain', width:13, height:9, alignSelf:'center',marginBottom:4}}></Image>
                 </View>
                 <View style={{flexDirection:'row', alignItems:'flex-start', padding:3}}>
-                    <Texto style={{color:'white',justifyContent:'end'}}>R$</Texto><Titulo style={{alignSelf:'start', color:'white', marginTop:-16}}>10.300</Titulo><Texto style={{color:'white'}}>,00</Texto>
+                    <Texto style={{color:'white',justifyContent:'end'}}>R$</Texto><Titulo style={{alignSelf:'start', color:'white', marginTop:-16}}>{ValorInteiro}</Titulo><Texto style={{color:'white'}}>,{Centavos}</Texto>
                 </View>
                 <View style={{flexDirection:'row', gap:16,marginTop:-10}}>
                     <BotaoAdd>
@@ -69,11 +81,13 @@ export default function Home(){
                 </View>
             </Card>
 
+            {financas.length > 0 &&(
             <MesesScroll
                 mesSelecionado={mesSelecionado}
                 handleMesSelecionado={handleMesSelecionado}
-                TextoComponent={Texto} />
+                TextoComponent={Texto} />)}
 
+            {financas.length > 0 &&(
             <ContainerSearch>
                 <SearchBar>
                     <Image source={lupa}></Image>
@@ -82,17 +96,25 @@ export default function Home(){
                     </TextInput>
                 </SearchBar>
                 <TouchableOpacity><Image source={filtro} style={{width:20, height:15, resizeMode:'contain', marginBottom:3}}></Image></TouchableOpacity>
-            </ContainerSearch>
+            </ContainerSearch>)}
             
         </View>
-        <View style={{flexDirection:'row', justifyContent:'space-between', marginTop:16, marginHorizontal: 40}}>
-            <MiniTexto style={{color:'#595959'}}>Informações</MiniTexto>
-            <View style={{flex: 1, flexDirection:'row', justifyContent:'flex-end', gap: 30}}> 
-                <MiniTexto style={{color:'#595959'}}>Valor</MiniTexto>
-                <MiniTexto style={{color:'#595959'}}>Categoria</MiniTexto>
-            </View>
-        </View>
 
+        {financas.length > 0 &&
+        (<View style={{flexDirection:'row', justifyContent:'space-between', marginTop:16, marginHorizontal: 40}}>
+                <MiniTexto style={{color:'#595959'}}>Informações</MiniTexto>
+                <View style={{flex: 1, flexDirection:'row', justifyContent:'flex-end', gap: 30}}>
+                    <MiniTexto style={{color:'#595959'}}>Valor</MiniTexto>
+                    <MiniTexto style={{color:'#595959'}}>Categoria</MiniTexto>
+                </View>
+            </View>)}
+
+        {financas.length === 0 &&(
+            <View style={{alignSelf:'center'}}>
+                <SubTitulo style={{color:'#4285F4', textAlign:'center', margin:30}}>Adicione suas transacoes e controle o seu dinheiro</SubTitulo>
+            </View>
+        )}
+            
         <ListaTransacoes data={financas}/>
         
 

@@ -20,7 +20,7 @@ const ListaTransacoes = ({ data }) => {
                 </Texto>
                 <Categoria style={{backgroundColor:(item.tipo === 'despesa') ? '#EA43354D' : '#34A85326'}}>
                     {/* Ajustado para usar as variáveis 'despesa' e 'receita' importadas */}
-                    <Image style={{resizeMode:'contain', width: 16, height: 16}} source={(item.tipo === 'despesa') ? despesa : receita}/>
+                    <Image style={{resizeMode:'contain', width: 12, height: 12}} source={(item.tipo === 'despesa') ? despesa : receita}/>
                     <MiniTexto 
                         numberOfLines={1} 
                         style={{width:58, color:(item.tipo === 'despesa') ? '#EA4335' : '#34A853'}}

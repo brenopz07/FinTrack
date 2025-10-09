@@ -43,17 +43,9 @@ export const financas = [
   {
     "titulo": "Conta de Luz",
     "descricao": "Fatura de consumo de energia elétrica - Mês Setembro",
-    "valor": 180.75,
+    "valor": 180.10,
     "data": "15/10/2025",
     "categoria": "Contas Fixas",
     "tipo": "despesa"
   },
-  {
-    "titulo": "Conta de Luz",
-    "descricao": "Fatura de consumo de energia elétrica - Mês Setembro",
-    "valor": 180.75,
-    "data": "15/10/2025",
-    "categoria": "Contas Fixas",
-    "tipo": "despesa"
-  }
 ]
