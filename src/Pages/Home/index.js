@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { View, Image, Text,Platform, ScrollView, TextInput, TouchableOpacity, FlatList } from 'react-native';
 import { Background, BotaoGradientBackground, ButtonText, ButtonTouchable,  MiniTexto, SubTitulo, Texto, Titulo} from '../../Styleguide/styles';
 import styled from 'styled-components/native';
@@ -12,11 +12,7 @@ import filtro from '../../assets/filtro.png'
 
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { useNavigation } from '@react-navigation/native';
-import { MesesScroll } from '../../components/seletor';
-
-
-import { meses } from '../../components/seletor';
+import { meses, MesesScroll } from '../../components/seletor';
 
 import { financas } from '../../data/financas';
 import ListaTransacoes from '../../components/lista_financas';
@@ -35,14 +31,33 @@ export default function Home(){
     const ValorInteiro = Math.floor(saldoFinal);
     const Centavos = Math.round((saldoFinal-ValorInteiro)*100).toString().padStart(2, '0');;
 
-
     const [mesSelecionado, setMesSelecionado] = useState(meses[0]);
     
-    // 2. Defina a função para mudar o estado (acionada pelo onPress)
+    const [mesDesejado, setMesDesejado] = useState('');
+
     const handleMesSelecionado = (mes) => {
         setMesSelecionado(mes);
+        if (mes === 'Out/25'){setMesDesejado('10')}
+        else if (mes === 'Set/25'){setMesDesejado('09')}
+        else if (mes === 'Ago/25'){setMesDesejado('08')}
+        else if (mes === 'Jul/25'){setMesDesejado('07')}
+        else if (mes === 'Jun/25'){setMesDesejado('06')}
+        else if (mes === 'Mai/25'){setMesDesejado('05')}
+        else if (mes === 'Abr/25'){setMesDesejado('04')}
+        else if (mes === 'Mar/25'){setMesDesejado('03')}
+        else if (mes === 'Fev/25'){setMesDesejado('02')}
+        else if (mes === 'Jan/25'){setMesDesejado('01')}
+        else(setMesDesejado(''))
     };
-    
+
+
+    const transacoesDoMes = useMemo(() => {
+    return financas.filter(item => {
+        const mesDaTransacao = item.data.split('/')[1];
+        return mesDaTransacao === mesDesejado;
+    });
+}, [financas, mesDesejado]); 
+
     return( 
     <View style={{backgroundColor: '#FFFFFF', flex:1}}>
         <View>
@@ -115,9 +130,8 @@ export default function Home(){
             </View>
         )}
             
-        <ListaTransacoes data={financas}/>
+        <ListaTransacoes data={(mesDesejado === '' ? financas : transacoesDoMes)}/>
         
-
     </View>
 
     )

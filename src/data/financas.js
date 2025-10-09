@@ -20,7 +20,7 @@ export const financas = [
     "titulo": "Supermercado",
     "descricao": "Compras da semana no Mercado",
     "valor": 350.50,
-    "data": "07/10/2025",
+    "data": "07/08/2025",
     "categoria": "Alimentação",
     "tipo": "despesa"
   },
@@ -28,7 +28,7 @@ export const financas = [
     "titulo": "Freelance - Design",
     "descricao": "Pagamento por projeto concluído",
     "valor": 800.00,
-    "data": "10/10/2025",
+    "data": "10/05/2025",
     "categoria": "Renda Extra",
     "tipo": "receita"
   },
@@ -36,7 +36,7 @@ export const financas = [
     "titulo": "Conta de Luz",
     "descricao": "Fatura de consumo de energia elétrica - Mês Setembro",
     "valor": 180.75,
-    "data": "15/10/2025",
+    "data": "15/09/2025",
     "categoria": "Contas Fixas",
     "tipo": "despesa"
   },

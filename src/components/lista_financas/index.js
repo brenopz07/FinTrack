@@ -6,6 +6,8 @@ import styled from 'styled-components';
 import despesa from '../../assets/despesa.png';
 import receita from '../../assets/receita.png';
 
+
+
 const ListaTransacoes = ({ data }) => {
     const renderTransacaoItem = ({ item }) => (
         <CardLista>

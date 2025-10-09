@@ -18,7 +18,45 @@ export const meses = [
     "Jan/25",
 ];
 
-// Estilo do botão de mês (exportado para uso no map)
+
+export function MesesScroll({ mesSelecionado, handleMesSelecionado}) {
+    return (
+        <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{
+                flexDirection: 'row',
+                paddingHorizontal: 42,
+                gap: 12,
+                alignItems: 'center',
+                marginTop: 30,
+                height: 35, /* Garante altura suficiente para o divisor */
+            }}
+            >
+            {meses.map((mes, index) => {
+                const isSelected = mes === mesSelecionado;
+                return (
+                    <React.Fragment key={index}>
+                        {/* 1. Componente BotaoMes (novo nome) */}
+                        <BotaoMes
+                            onPress={() => handleMesSelecionado(mes)}
+                            isSelected={isSelected}
+                            >
+                            <Texto style={{ color: isSelected ? 'white' : 'black' }}>
+                                {mes}
+                            </Texto>
+                        </BotaoMes>
+
+                        {/* 2. Divisor Condicional */}
+                        {mes === "Geral" && <Divisor />}
+                    </React.Fragment>
+                );
+            })}
+        </ScrollView>
+        
+    );
+}
+
 const BotaoMes = styled.TouchableOpacity.attrs(props => ({
     activeOpacity: 0.7,
 }))`
@@ -44,45 +82,3 @@ const Divisor = styled.View`
     background-color: #F0F2F5; /* Cor do divisor */
     margin: 0 4px;
 `;
-
-// Componente principal rolável (renomeado para MesesScroll)
-export function MesesScroll({ mesSelecionado, handleMesSelecionado, TextoComponent }) {
-    
-    // O TextoComponent (seu styled-component Texto) deve ser passado via prop para este arquivo.
-   
-    return (
-        <ScrollView
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{
-                flexDirection: 'row',
-                paddingHorizontal: 42,
-                gap: 12,
-                alignItems: 'center',
-                marginTop: 30,
-                height: 35, /* Garante altura suficiente para o divisor */
-            }}
-        >
-            {meses.map((mes, index) => {
-                const isSelected = mes === mesSelecionado;
-
-                return (
-                    <React.Fragment key={index}>
-                        {/* 1. Componente BotaoMes (novo nome) */}
-                        <BotaoMes
-                            onPress={() => handleMesSelecionado(mes)}
-                            isSelected={isSelected}
-                        >
-                            <Texto style={{ color: isSelected ? 'white' : 'black' }}>
-                                {mes}
-                            </Texto>
-                        </BotaoMes>
-
-                        {/* 2. Divisor Condicional */}
-                        {mes === "Geral" && <Divisor />}
-                    </React.Fragment>
-                );
-            })}
-        </ScrollView>
-    );
-}
