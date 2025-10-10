@@ -1,22 +1,22 @@
-import React from 'react';
-import { ScrollView, FlatList, View, Text, Image } from 'react-native';
+import React, { useState } from 'react';
+import { ScrollView, FlatList, View, Text, Image,TouchableOpacity } from 'react-native';
 
 import { MiniTexto, Texto } from '../../Styleguide/styles';
 import styled from 'styled-components';
 import despesa from '../../assets/despesa.png';
 import receita from '../../assets/receita.png';
 
-
-
-const ListaTransacoes = ({ data }) => {
+const ListaTransacoes = ({ data, onTransacaoPress }) => {
     const renderTransacaoItem = ({ item }) => (
-        <CardLista>
-            <View style={{alignItems:'flex-start', justifyContent:'center'}}>
+        <CardLista
+        onPress={() => onTransacaoPress(item)} 
+        >
+            <View style={{justifyContent:'center'}}>
                 {/* O numberOfLines é a solução para truncar texto com '...' */}
                 <Texto numberOfLines={1}>{item.titulo}</Texto> 
                 <MiniTexto>{item.data}</MiniTexto>
             </View>
-            <View style={{flex: 1, flexDirection:'row', justifyContent:'flex-end', gap: 8}}>
+            <View style={{flexDirection:'row', gap: 8}}>
                 <Texto tipo={item.tipo}>
                     R$ {item.valor.toFixed(2)}
                 </Texto>
@@ -54,21 +54,20 @@ const ListaTransacoes = ({ data }) => {
 
 export default ListaTransacoes;
 
- export const Container = styled.View`
-width: 330;
+const Container = styled.View`
 height: 495;
 angle: 0 deg;
 opacity: 1;
-margin-horizontal:40;
 margin-bottom:15;
+margin-horizontal:30;
 `;
 
-export const CardLista = styled.View`
+const CardLista = styled.TouchableOpacity`
 flex-direction:row;
 margin-top:12;
 justify-content:space-between;
 height:60;
-width: 330;
+width: 100%;
 height: 60;
 gap: 8px;
 angle: 0 deg;
@@ -78,6 +77,7 @@ padding-bottom: 12px;
 border-bottom-width: 1px;
 border-bottom: 1px;
 border-color: #F0F2F5;
+
 `;
 
 export const Categoria = styled.View`

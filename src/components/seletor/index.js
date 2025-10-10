@@ -26,12 +26,11 @@ export function MesesScroll({ mesSelecionado, handleMesSelecionado}) {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{
                 flexDirection: 'row',
-                paddingHorizontal: 42,
                 gap: 12,
                 alignItems: 'center',
                 marginTop: 30,
-                height: 35, /* Garante altura suficiente para o divisor */
-            }}
+                height: 35,
+                marginHorizontal:30,}}
             >
             {meses.map((mes, index) => {
                 const isSelected = mes === mesSelecionado;
@@ -60,7 +59,7 @@ export function MesesScroll({ mesSelecionado, handleMesSelecionado}) {
 const BotaoMes = styled.TouchableOpacity.attrs(props => ({
     activeOpacity: 0.7,
 }))`
-    width: auto; /* Deixei auto para se ajustar ao conteúdo */
+    width: auto; 
     height: 28px;
     border-radius: 999px;
     padding: 3px 10px;

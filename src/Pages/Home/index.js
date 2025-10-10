@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { View, Image, Text,Platform, ScrollView, TextInput, TouchableOpacity, FlatList } from 'react-native';
+import { View, Image, Text,Platform, ScrollView, TextInput, TouchableOpacity, FlatList, Modal, Pressable } from 'react-native';
 import { Background, BotaoGradientBackground, ButtonText, ButtonTouchable,  MiniTexto, SubTitulo, Texto, Titulo} from '../../Styleguide/styles';
 import styled from 'styled-components/native';
 import logo from '../../assets/Logo (1).png';
@@ -15,10 +15,11 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { meses, MesesScroll } from '../../components/seletor';
 
 import { financas } from '../../data/financas';
-import ListaTransacoes from '../../components/lista_financas';
+import ListaTransacoes, { modalReceita } from '../../components/lista_financas';
+import ModalReceita from '../../components/modalReceita';
+
 
 export default function Home(){
-
     const totalReceitas = financas
     .filter(item => item.tipo === 'receita') // Filtra apenas as receitas
     .reduce((acumulador, item) => acumulador + item.valor, 0); // Soma os valores
@@ -35,6 +36,10 @@ export default function Home(){
     
     const [mesDesejado, setMesDesejado] = useState('');
 
+    const [modalView, setModalView] = useState(false); 
+
+    const [transacaoSelecionada, setTransacaoSelecionada] = useState(null);
+
     const handleMesSelecionado = (mes) => {
         setMesSelecionado(mes);
         if (mes === 'Out/25'){setMesDesejado('10')}
@@ -50,6 +55,10 @@ export default function Home(){
         else(setMesDesejado(''))
     };
 
+    const handleTransacaoPress = (item) => {
+    setTransacaoSelecionada(item); // salva os dados do item
+    setModalView(true); // abre o modal
+    };
 
     const transacoesDoMes = useMemo(() => {
     return financas.filter(item => {
@@ -80,7 +89,7 @@ export default function Home(){
                 <View style={{flexDirection:'row', alignItems:'flex-start', padding:3}}>
                     <Texto style={{color:'white',justifyContent:'end'}}>R$</Texto><Titulo style={{alignSelf:'start', color:'white', marginTop:-16}}>{ValorInteiro}</Titulo><Texto style={{color:'white'}}>,{Centavos}</Texto>
                 </View>
-                <View style={{flexDirection:'row', gap:16,marginTop:-10}}>
+                <View style={{flexDirection:'row', gap:16, marginTop:-10}}>
                     <BotaoAdd>
                         <View style={{flexDirection:'row', justifyContent:'space-between'}}>
                             <Texto style={{color:'#34A853'}}>Receitas</Texto>
@@ -116,7 +125,7 @@ export default function Home(){
         </View>
 
         {financas.length > 0 &&
-        (<View style={{flexDirection:'row', justifyContent:'space-between', marginTop:16, marginHorizontal: 40}}>
+        (<View style={{flexDirection:'row', justifyContent:'space-between', marginTop:16, marginHorizontal: 30}}>
                 <MiniTexto style={{color:'#595959'}}>Informações</MiniTexto>
                 <View style={{flex: 1, flexDirection:'row', justifyContent:'flex-end', gap: 30}}>
                     <MiniTexto style={{color:'#595959'}}>Valor</MiniTexto>
@@ -130,8 +139,13 @@ export default function Home(){
             </View>
         )}
             
-        <ListaTransacoes data={(mesDesejado === '' ? financas : transacoesDoMes)}/>
+        <ListaTransacoes 
+        data={(mesDesejado === '' ? financas : transacoesDoMes)}
+        onTransacaoPress={handleTransacaoPress}/>
         
+
+        <ModalReceita modalView={modalView} setModalView={setModalView} transacao={transacaoSelecionada} />
+
     </View>
 
     )
@@ -143,7 +157,7 @@ const Card = styled(LinearGradient).attrs({
   start: { x: 0, y: 0 },
   end: { x: 1, y: 0 },
 })`
-width: 330;
+width: 85%;
 height: 144;
 gap: 8px;
 angle: 0 deg;
@@ -152,9 +166,11 @@ border-radius: 12px;
 padding: 16px;
 background: black;
 margin-top:29;
+margin-right:30;
+margin-left:30;
 `
 const BotaoAdd = styled.TouchableOpacity`
-width: 141;
+flex:1;
 height: 38;
 justify-content: space-between;
 angle: 0 deg;
@@ -186,63 +202,19 @@ const SearchBar = styled.View`
     border-radius: 999px; 
     border-width: 2px;
     border-color: #F0F2F5;
-    width:294;
     padding-left:12;
     gap:12;
+    width:78%;
+    margin-left:30;
 `;
 
 const ContainerSearch = styled.View`
     flex-direction:row;
     align-items:center;
-    gap:8;
-    width: 330;
     height: 37;
     gap: 8px;
     angle: 0 deg;
     opacity: 1;
-    padding-right: 8px;
-    margin-horizontal:40;
-    margin-top:30
-
+    padding-right: 0px;
+    margin-top:30;
 `
-
-const Container = styled.View`
-width: 330;
-height: 495;
-angle: 0 deg;
-opacity: 1;
-margin-horizontal:40;
-margin-bottom:15;
-`;
-
-const CardLista = styled.View`
-flex-direction:row;
-margin-top:12;
-justify-content:space-between;
-height:60;
-width: 330;
-height: 60;
-gap: 8px;
-angle: 0 deg;
-opacity: 1;
-padding-top: 12px;
-padding-bottom: 12px;
-border-bottom-width: 1px;
-border-bottom: 1px;
-border-color: #F0F2F5;
-`;
-
-const Categoria = styled.View`
-flex-direction:row;
-width: 82.5;
-height: 21;
-gap: 2px;
-border-radius: 999px;
-padding-top: 3px;
-padding-right: 6px;
-padding-bottom: 3px;
-padding-left: 4.5px;
-align-items:center;
-margin-right:0;
-`;
-
