@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { View, Image, Text,Platform, ScrollView, TextInput, TouchableOpacity, FlatList, Modal, Pressable } from 'react-native';
+import { View, Image, Text,Platform, ScrollView, TextInput, TouchableOpacity, FlatList, Modal, Pressable, SafeAreaView } from 'react-native';
 import { Background, BotaoGradientBackground, ButtonText, ButtonTouchable,  MiniTexto, SubTitulo, Texto, Titulo} from '../../Styleguide/styles';
 import styled from 'styled-components/native';
 import logo from '../../assets/Logo (1).png';
@@ -68,7 +68,8 @@ export default function Home(){
 }, [financas, mesDesejado]); 
 
     return( 
-    <View style={{backgroundColor: '#FFFFFF', flex:1}}>
+        
+    <View style={{backgroundColor: '#FFFFFF', flex:1, marginBottom:15}}>
         <View>
             <View style={{flexDirection:'row', marginTop:30, marginHorizontal:30, alignContent:'center',justifyContent:'space-between'}}>
                 <View style={{flexDirection:'row'}}>

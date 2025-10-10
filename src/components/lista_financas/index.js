@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { ScrollView, FlatList, View, Text, Image,TouchableOpacity } from 'react-native';
+
 
 import { MiniTexto, Texto } from '../../Styleguide/styles';
-import styled from 'styled-components';
+
 import despesa from '../../assets/despesa.png';
 import receita from '../../assets/receita.png';
+import styled from 'styled-components/native';
+import { FlatList, Image, ScrollView, View } from 'react-native';
 
 const ListaTransacoes = ({ data, onTransacaoPress }) => {
     const renderTransacaoItem = ({ item }) => (
