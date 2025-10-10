@@ -8,8 +8,15 @@ import despesa1 from '../../assets/despesa.png'
 import receita1 from '../../assets/receita.png'
 import apagar from '../../assets/excluir.png'
 import editar from '../../assets/editar.png'
+import { useState } from "react";
+import ModalConfirm from "../modalConfirm";
+
+
 
 export default function ModalReceita({modalView, setModalView, transacao}){
+    
+const [modalConfirm,setModalConfirm] = useState(false);
+
      if (!transacao) return null;
     return(
     <Modal
@@ -57,7 +64,7 @@ export default function ModalReceita({modalView, setModalView, transacao}){
                     </View>
                 </Container>
                 <View style={{flexDirection:'row',gap:16, width:'100%'}}>
-                    <BotaoApagar onPress={() => {modalConfirm}}>
+                    <BotaoApagar onPress={() => {setModalConfirm(true)}}>
                         <Image source={apagar} style={{width:12, height:13}}></Image>
                         <Texto style={{alignSelf:'center',color:'#EA4335'}}>Apagar</Texto>
                     </BotaoApagar>
@@ -66,7 +73,7 @@ export default function ModalReceita({modalView, setModalView, transacao}){
                         <Texto style={{alignSelf:'center'}}>Editar</Texto>
                     </BotaoEdit>
                 </View>
-
+                <ModalConfirm modalConfirm={modalConfirm} setModalConfirm={setModalConfirm}/>
             </CardModal>
         </Pressable>
       </Pressable>
@@ -74,7 +81,7 @@ export default function ModalReceita({modalView, setModalView, transacao}){
     );
 }
 
-const CardModal = styled.View`
+export const CardModal = styled.View`
 width: 100%;
 height: auto;
 gap: 16px;
