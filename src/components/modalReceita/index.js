@@ -11,13 +11,8 @@ import editar from '../../assets/editar.png'
 import { useEffect, useState } from "react";
 import ModalConfirm from "../modalConfirm";
 
-import { financas } from "../../data/financas";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
-
 export default function ModalReceita({modalView, setModalView, transacao, receitas, setReceitas}){
-
-  const [modalConfirm,setModalConfirm] = useState(false);
+    const [modalConfirmView,setModalConfirmView] = useState(false);
 
      if (!transacao) return null;
     return(
@@ -66,7 +61,7 @@ export default function ModalReceita({modalView, setModalView, transacao, receit
                     </View>
                 </Container>
                 <View style={{flexDirection:'row',gap:16, width:'100%'}}>
-                    <BotaoApagar onPress={() => {setModalConfirm(true)}}>
+                    <BotaoApagar onPress={() => {setModalConfirmView(true); console.log(receitas)}}>
                         <Image source={apagar} style={{width:12, height:13}}></Image>
                         <Texto style={{alignSelf:'center',color:'#EA4335'}}>Apagar</Texto>
                     </BotaoApagar>
@@ -75,8 +70,7 @@ export default function ModalReceita({modalView, setModalView, transacao, receit
                         <Texto style={{alignSelf:'center'}}>Editar</Texto>
                     </BotaoEdit>
                 </View>
-                <ModalConfirm modalConfirm={modalConfirm} setModalConfirm={setModalConfirm} transacao={transacao} listaFinancas={listaFinancas}
-          setListaFinancas={setListaFinancas}/>
+                <ModalConfirm modalConfirmView={modalConfirmView} setModalConfirmView={setModalConfirmView} transacao={transacao} receitas={receitas} setReceitas={setReceitas} modalView={modalView} setModalView={setModalView}/>
             </CardModal>
         </Pressable>
       </Pressable>

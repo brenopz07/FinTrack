@@ -35,7 +35,7 @@ const [descricao, setDescricao] = useState(null);
               id: Date.now().toString(),
               tipo: 'receita',
               titulo : titulo,
-              valor: valor,
+              valor: Number(valor.replace(/\./g, '').replace(',', '.')),
               data: data,
               descricao: descricao,
               categoria: categoria,
@@ -56,7 +56,7 @@ const [descricao, setDescricao] = useState(null);
               id: Date.now().toString(),
               tipo: 'despesa',
               titulo : titulo,
-              valor: valor,
+              valor:  Number(valor.replace(/\./g, '').replace(',', '.')),
               data: data,
               descricao: descricao,
               categoria: categoria,
@@ -72,11 +72,14 @@ const [descricao, setDescricao] = useState(null);
             limparInputs();
             
   };
- const handleChange = (texto) => {
-    // Remove tudo que não for número ou vírgula/ponto
-    const numero = texto.replace(/[^0-9.,]/g, '');
-    setValor(numero);
+  const handleChange = (texto) => {
+    // Remove tudo que não for número
+    const numero = texto.replace(/\D/g, '');
+    // Formata para moeda (ex: 5222 -> 52,22)
+    const valorFormatado = (Number(numero) / 100).toFixed(2).replace('.', ',');
+    setValor(valorFormatado);
   };
+
     return(
     <Modal
       visible={modalAddView}
@@ -140,7 +143,7 @@ const [descricao, setDescricao] = useState(null);
                         <View style={{flexDirection:'row'}}>
                             <TextoInput 
                                 placeholder='R$ 0,00'
-                                value={`R$ ${valor}`}
+                                value={valor ? `R$ ${valor}` : ''}
                                 onChangeText={handleChange}
                                 >
                             </TextoInput>

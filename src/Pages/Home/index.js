@@ -14,7 +14,6 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 import { meses, MesesScroll } from '../../components/seletor';
 
-import { financas } from '../../data/financas';
 import ListaTransacoes, { modalReceita } from '../../components/lista_financas';
 import ModalReceita from '../../components/modalReceita';
 import ModalAdiciona from '../../components/modalAdd';
@@ -24,7 +23,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function Home(){
 
     const [receitas, setReceitas] = useState([]);
-    const [despesas, setDespesas] = useState([]);
     
     const totalReceitas = receitas
     .filter(item => item.tipo === 'receita') // Filtra apenas as receitas
@@ -49,6 +47,7 @@ export default function Home(){
 
     const [transacaoSelecionada, setTransacaoSelecionada] = useState(null);
 
+
     const handleMesSelecionado = (mes) => {
         setMesSelecionado(mes);
         if (mes === 'Out/25'){setMesDesejado('10')}
@@ -70,11 +69,13 @@ export default function Home(){
     };
 
     const transacoesDoMes = useMemo(() => {
-    return financas.filter(item => {
+    return receitas.filter(item => {
         const mesDaTransacao = item.data.split('/')[1];
         return mesDaTransacao === mesDesejado;
     });
-}, [financas, mesDesejado]); 
+}, [receitas, mesDesejado]); 
+
+/*
 const limparReceitas = async () => {
   setReceitas([]); // limpa o estado
   try {
@@ -83,6 +84,8 @@ const limparReceitas = async () => {
     console.log("Erro ao limpar AsyncStorage:", erro);
   }
 };
+*/
+
   useEffect(() => {
     const carregarDados = async () => {
       try {
@@ -129,7 +132,7 @@ const limparReceitas = async () => {
                     <Image source={olho} style={{resizeMode:'contain', width:13, height:9, alignSelf:'center',marginBottom:4}}></Image>
                 </View>
                 <View style={{flexDirection:'row', alignItems:'flex-start', padding:3}}>
-                    <Texto style={{color:'white',justifyContent:'end'}}>R$</Texto><Titulo style={{alignSelf:'start', color:'white', marginTop:-16}}>{ValorInteiro}</Titulo><Texto style={{color:'white'}}>,{Centavos}</Texto>
+                    <Texto style={{color:'white',justifyContent:'end'}}>R$</Texto><Titulo style={{alignSelf:'start', color:'white', marginTop:-16}}>{saldoFinal}</Titulo><Texto style={{color:'white'}}>,{Centavos}</Texto>
                 </View>
                 <View style={{flexDirection:'row', gap:16, marginTop:-10}}>
                     <BotaoAdd onPress={() => {setModalAddView(true); setReceita(true); setDespesa(false)}}>
@@ -186,10 +189,11 @@ const limparReceitas = async () => {
         onTransacaoPress={handleTransacaoPress}/>
         
 
-        <ModalReceita modalView={modalView} setModalView={setModalView} transacao={transacaoSelecionada} receita={receita} setReceita={setReceita} />
+        <ModalReceita modalView={modalView} setModalView={setModalView} transacao={transacaoSelecionada} receita={receita} setReceita={setReceita} receitas={receitas} setReceitas={setReceitas}/>
 
-        <ModalAdiciona modalAddView={modalAddView} setModalAddView={setModalAddView} despesa={despesa} receita={receita} receitas={receitas} setReceitas={setReceitas} despesas={despesas} setDespesas={setDespesas}></ModalAdiciona>
+        <ModalAdiciona modalAddView={modalAddView} setModalAddView={setModalAddView} despesa={despesa} receita={receita} receitas={receitas} setReceitas={setReceitas}></ModalAdiciona>
 
+     
     </View>
 
     )

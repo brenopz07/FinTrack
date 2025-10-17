@@ -5,26 +5,26 @@ import styled from "styled-components/native";
 import aviso from '../../assets/aviso.png'
 import { SubTitulo, Texto, Titulo } from "../../Styleguide/styles";
 
-import { financas } from "../../data/financas";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
 
-export default function ModalConfirm({modalConfirm, setModalConfirm, transacao, financas, setFinancas
-}){
+export default function ModalConfirm({modalConfirmView, setModalConfirmView, transacao, receitas, setReceitas, modalView, setModalView}){
      
   const excluirReceita = (id) => {
-    setFinancas(financas.filter((transacao) => transacao.id !== id));
-    console.log('transacao excluida:',transacao)
+    const novaLista = receitas.filter((transacao) => transacao.id !== id);
+    setReceitas(novaLista);
+    setModalConfirmView(false);
+    setModalView(false);
   };
 
     return(
         <Modal
-          visible={modalConfirm}
+          visible={modalConfirmView}
           transparent={true}
           animationType="fade"
-          onRequestClose={() => setModalConfirm(false)}>
+          onRequestClose={() => setModalConfirmView(false)}>
             <Pressable
-            onPress={() => setModalConfirm(false)}
+            onPress={() => setModalConfirmView(false)}
             style={{
                 flex: 1,
                 backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -40,10 +40,10 @@ export default function ModalConfirm({modalConfirm, setModalConfirm, transacao, 
                                 <Texto>Essa ação náo pode ser desfeita. Por favor, confirme se deseja prosseguir.</Texto>
                             </View>
                             <View style={{flexDirection:'row',gap:16, width:'100%'}}>
-                                <BotaoConfirmar onPress={() => {excluirReceita(transacao) ,setModalConfirm(false)}}>
+                                <BotaoConfirmar onPress={() => {excluirReceita(transacao.id) ,setModalConfirmView(false)}}>
                                     <Texto style={{alignSelf:'center',color:'#FFFFFF'}}>Confirmar</Texto>
                                 </BotaoConfirmar>
-                                <BotaoCancelar onPress={() => {setModalConfirm(false)}}>
+                                <BotaoCancelar onPress={() => {setModalConfirmView(false)}}>
                                     <Texto style={{alignSelf:'center', color:'#595959'}}>Cancelar</Texto>
                                 </BotaoCancelar>
                             </View>
