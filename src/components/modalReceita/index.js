@@ -8,14 +8,16 @@ import despesa1 from '../../assets/despesa.png'
 import receita1 from '../../assets/receita.png'
 import apagar from '../../assets/excluir.png'
 import editar from '../../assets/editar.png'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ModalConfirm from "../modalConfirm";
 
+import { financas } from "../../data/financas";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
-export default function ModalReceita({modalView, setModalView, transacao}){
-    
-const [modalConfirm,setModalConfirm] = useState(false);
+export default function ModalReceita({modalView, setModalView, transacao, receitas, setReceitas}){
+
+  const [modalConfirm,setModalConfirm] = useState(false);
 
      if (!transacao) return null;
     return(
@@ -73,7 +75,8 @@ const [modalConfirm,setModalConfirm] = useState(false);
                         <Texto style={{alignSelf:'center'}}>Editar</Texto>
                     </BotaoEdit>
                 </View>
-                <ModalConfirm modalConfirm={modalConfirm} setModalConfirm={setModalConfirm}/>
+                <ModalConfirm modalConfirm={modalConfirm} setModalConfirm={setModalConfirm} transacao={transacao} listaFinancas={listaFinancas}
+          setListaFinancas={setListaFinancas}/>
             </CardModal>
         </Pressable>
       </Pressable>
@@ -93,7 +96,7 @@ border-top-right-radius: 32px;
 background: #FFFFFF;
 
 `
-const Linha = styled.View`
+export const Linha = styled.View`
 border: 30px;
 border-color:#F0F2F5;
 width: 100%;
@@ -101,7 +104,7 @@ height: 0px;
 angle: 0 deg;
 border-width: 3px;
 `
-const Container = styled.View`
+export const Container = styled.View`
 width: 100%;
 height: auto;
 `

@@ -5,7 +5,18 @@ import styled from "styled-components/native";
 import aviso from '../../assets/aviso.png'
 import { SubTitulo, Texto, Titulo } from "../../Styleguide/styles";
 
-export default function ModalConfirm({modalConfirm, setModalConfirm}){
+import { financas } from "../../data/financas";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useState } from "react";
+
+export default function ModalConfirm({modalConfirm, setModalConfirm, transacao, financas, setFinancas
+}){
+     
+  const excluirReceita = (id) => {
+    setFinancas(financas.filter((transacao) => transacao.id !== id));
+    console.log('transacao excluida:',transacao)
+  };
+
     return(
         <Modal
           visible={modalConfirm}
@@ -29,7 +40,7 @@ export default function ModalConfirm({modalConfirm, setModalConfirm}){
                                 <Texto>Essa ação náo pode ser desfeita. Por favor, confirme se deseja prosseguir.</Texto>
                             </View>
                             <View style={{flexDirection:'row',gap:16, width:'100%'}}>
-                                <BotaoConfirmar onPress={() => {setModalConfirm(true)}}>
+                                <BotaoConfirmar onPress={() => {excluirReceita(transacao) ,setModalConfirm(false)}}>
                                     <Texto style={{alignSelf:'center',color:'#FFFFFF'}}>Confirmar</Texto>
                                 </BotaoConfirmar>
                                 <BotaoCancelar onPress={() => {setModalConfirm(false)}}>
@@ -56,7 +67,7 @@ background: #FFFFFF;
 margin-horizontal:30;
 `
 
-const BotaoCancelar = styled.TouchableOpacity`
+export const BotaoCancelar = styled.TouchableOpacity`
 flex:1;
 height: auto;
 gap: 10px;
@@ -68,7 +79,7 @@ padding-top: 6px;
 padding-bottom: 6px;
 justify-content:center;
 `
-const BotaoConfirmar = styled.TouchableOpacity`
+export const BotaoConfirmar = styled.TouchableOpacity`
 flex:1;
 height: auto;
 gap: 10px;

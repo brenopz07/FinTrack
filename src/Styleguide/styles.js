@@ -99,7 +99,7 @@ export const ButtonText = styled.Text`
 `;
 
 export const LabelInput = styled.View`
-width: 330px;
+width: '100%';
 height: 56px;
 justify-content: space-between;
 angle: 0 deg;

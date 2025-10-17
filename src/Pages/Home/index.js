@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { View, Image, Text,Platform, ScrollView, TextInput, TouchableOpacity, FlatList, Modal, Pressable, SafeAreaView } from 'react-native';
 import { Background, BotaoGradientBackground, ButtonText, ButtonTouchable,  MiniTexto, SubTitulo, Texto, Titulo} from '../../Styleguide/styles';
 import styled from 'styled-components/native';
@@ -17,14 +17,20 @@ import { meses, MesesScroll } from '../../components/seletor';
 import { financas } from '../../data/financas';
 import ListaTransacoes, { modalReceita } from '../../components/lista_financas';
 import ModalReceita from '../../components/modalReceita';
-
+import ModalAdiciona from '../../components/modalAdd';
+import ModalConfirm from '../../components/modalConfirm';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Home(){
-    const totalReceitas = financas
+
+    const [receitas, setReceitas] = useState([]);
+    const [despesas, setDespesas] = useState([]);
+    
+    const totalReceitas = receitas
     .filter(item => item.tipo === 'receita') // Filtra apenas as receitas
     .reduce((acumulador, item) => acumulador + item.valor, 0); // Soma os valores
 
-    const totalDespesas = financas
+    const totalDespesas = receitas
         .filter(item => item.tipo === 'despesa') // Filtra apenas as despesas
         .reduce((acumulador, item) => acumulador + item.valor, 0); // Soma os valores
 
@@ -37,6 +43,9 @@ export default function Home(){
     const [mesDesejado, setMesDesejado] = useState('');
 
     const [modalView, setModalView] = useState(false); 
+    const [modalAddView, setModalAddView] = useState(false); 
+    const [receita, setReceita] = useState(false);
+    const [despesa, setDespesa] = useState(false);
 
     const [transacaoSelecionada, setTransacaoSelecionada] = useState(null);
 
@@ -66,9 +75,41 @@ export default function Home(){
         return mesDaTransacao === mesDesejado;
     });
 }, [financas, mesDesejado]); 
+const limparReceitas = async () => {
+  setReceitas([]); // limpa o estado
+  try {
+    await AsyncStorage.removeItem('@financas'); // remove do armazenamento local
+  } catch (erro) {
+    console.log("Erro ao limpar AsyncStorage:", erro);
+  }
+};
+  useEffect(() => {
+    const carregarDados = async () => {
+      try {
+        const dadosSalvos = await AsyncStorage.getItem('@financas');
+        if (dadosSalvos) {
+          setReceitas(JSON.parse(dadosSalvos));
+        }
+      } catch (erro) {
+        console.log('Erro ao carregar dados: ', erro);
+      }
+    };
+    carregarDados();
+  }, []);
+
+  // 🟡 Salvar dados sempre que o estado `receitas` mudar
+  useEffect(() => {
+    const salvarDados = async () => {
+      try {
+        await AsyncStorage.setItem('@financas', JSON.stringify(receitas));
+      } catch (erro) {
+        console.log('Erro ao salvar dados: ', erro);
+      }
+    };
+    salvarDados();
+  }, [receitas]);
 
     return( 
-        
     <View style={{backgroundColor: '#FFFFFF', flex:1, marginBottom:15}}>
         <View>
             <View style={{flexDirection:'row', marginTop:30, marginHorizontal:30, alignContent:'center',justifyContent:'space-between'}}>
@@ -91,13 +132,13 @@ export default function Home(){
                     <Texto style={{color:'white',justifyContent:'end'}}>R$</Texto><Titulo style={{alignSelf:'start', color:'white', marginTop:-16}}>{ValorInteiro}</Titulo><Texto style={{color:'white'}}>,{Centavos}</Texto>
                 </View>
                 <View style={{flexDirection:'row', gap:16, marginTop:-10}}>
-                    <BotaoAdd>
+                    <BotaoAdd onPress={() => {setModalAddView(true); setReceita(true); setDespesa(false)}}>
                         <View style={{flexDirection:'row', justifyContent:'space-between'}}>
                             <Texto style={{color:'#34A853'}}>Receitas</Texto>
                             <Image source={addReceita}></Image>
                         </View>
                     </BotaoAdd>
-                    <BotaoAdd>
+                    <BotaoAdd onPress={() => {setModalAddView(true); setDespesa(true); setReceita(false)}}>
                         <View style={{flexDirection:'row', justifyContent:'space-between'}}>
                             <Texto style={{color:'#EA4335'}}>Despesas</Texto>
                             <Image source={addDespesa}></Image>
@@ -106,13 +147,13 @@ export default function Home(){
                 </View>
             </Card>
 
-            {financas.length > 0 &&(
+            {receitas.length > 0 &&(
             <MesesScroll
                 mesSelecionado={mesSelecionado}
                 handleMesSelecionado={handleMesSelecionado}
                 TextoComponent={Texto} />)}
 
-            {financas.length > 0 &&(
+            {receitas.length > 0 &&(
             <ContainerSearch>
                 <SearchBar>
                     <Image source={lupa}></Image>
@@ -125,7 +166,7 @@ export default function Home(){
             
         </View>
 
-        {financas.length > 0 &&
+        {receitas.length > 0 &&
         (<View style={{flexDirection:'row', justifyContent:'space-between', marginTop:16, marginHorizontal: 30}}>
                 <MiniTexto style={{color:'#595959'}}>Informações</MiniTexto>
                 <View style={{flex: 1, flexDirection:'row', justifyContent:'flex-end', gap: 30}}>
@@ -134,18 +175,20 @@ export default function Home(){
                 </View>
             </View>)}
 
-        {financas.length === 0 &&(
+        {receitas.length === 0 &&(
             <View style={{alignSelf:'center'}}>
                 <SubTitulo style={{color:'#4285F4', textAlign:'center', margin:30}}>Adicione suas transacoes e controle o seu dinheiro</SubTitulo>
             </View>
         )}
             
         <ListaTransacoes 
-        data={(mesDesejado === '' ? financas : transacoesDoMes)}
+        data={(mesDesejado === '' ? receitas : transacoesDoMes)}
         onTransacaoPress={handleTransacaoPress}/>
         
 
-        <ModalReceita modalView={modalView} setModalView={setModalView} transacao={transacaoSelecionada} />
+        <ModalReceita modalView={modalView} setModalView={setModalView} transacao={transacaoSelecionada} receita={receita} setReceita={setReceita} />
+
+        <ModalAdiciona modalAddView={modalAddView} setModalAddView={setModalAddView} despesa={despesa} receita={receita} receitas={receitas} setReceitas={setReceitas} despesas={despesas} setDespesas={setDespesas}></ModalAdiciona>
 
     </View>
 

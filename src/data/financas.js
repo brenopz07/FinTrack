@@ -1,6 +1,7 @@
 
 export const financas = [
   {
+    "id":1,
     "titulo": "Salário",
     "descricao": "Crédito mensal",
     "valor": 4500.00,
@@ -9,6 +10,7 @@ export const financas = [
     "tipo": "receita"
   },
   {
+    "id":2,
     "titulo": "Aluguel",
     "descricao": "Pagamento de aluguel residencial",
     "valor": 1200.00,
@@ -17,6 +19,7 @@ export const financas = [
     "tipo": "despesa"
   },
   {
+    "id":3,
     "titulo": "Supermercado",
     "descricao": "Compras da semana no Mercado",
     "valor": 350.50,
@@ -25,6 +28,7 @@ export const financas = [
     "tipo": "despesa"
   },
   {
+    "id":4,
     "titulo": "Freelance - Design",
     "descricao": "Pagamento por projeto concluído",
     "valor": 800.00,
@@ -33,6 +37,7 @@ export const financas = [
     "tipo": "receita"
   },
   {
+    "id":5,
     "titulo": "Conta de Luz",
     "descricao": "Fatura de consumo de energia elétrica - Mês Setembro",
     "valor": 180.75,
@@ -41,6 +46,7 @@ export const financas = [
     "tipo": "despesa"
   },
   {
+    "id":6,
     "titulo": "Conta de Luz",
     "descricao": "Fatura de consumo de energia elétrica - Mês Setembro",
     "valor": 180.10,

@@ -1,12 +1,10 @@
-import React, { useState } from 'react';
-
-
 import { MiniTexto, Texto } from '../../Styleguide/styles';
 
 import despesa from '../../assets/despesa.png';
 import receita from '../../assets/receita.png';
 import styled from 'styled-components/native';
 import { FlatList, Image, ScrollView, View } from 'react-native';
+
 
 const ListaTransacoes = ({ data, onTransacaoPress }) => {
     const renderTransacaoItem = ({ item }) => (
@@ -20,7 +18,7 @@ const ListaTransacoes = ({ data, onTransacaoPress }) => {
             </View>
             <View style={{flexDirection:'row', gap: 8}}>
                 <Texto tipo={item.tipo}>
-                    R$ {item.valor.toFixed(2)}
+                    R$ {item.valor}
                 </Texto>
                 <Categoria style={{backgroundColor:(item.tipo === 'despesa') ? '#EA43354D' : '#34A85326'}}>
                     {/* Ajustado para usar as variáveis 'despesa' e 'receita' importadas */}
