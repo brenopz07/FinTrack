@@ -24,30 +24,21 @@ export default function Home(){
 
     const [receitas, setReceitas] = useState([]);
     
-    const totalReceitas = receitas
-    .filter(item => item.tipo === 'receita') // Filtra apenas as receitas
-    .reduce((acumulador, item) => acumulador + item.valor, 0); // Soma os valores
 
-    const totalDespesas = receitas
-        .filter(item => item.tipo === 'despesa') // Filtra apenas as despesas
-        .reduce((acumulador, item) => acumulador + item.valor, 0); // Soma os valores
-
-    const saldoFinal = totalReceitas - totalDespesas;
-    const ValorInteiro = Math.floor(saldoFinal);
-    const Centavos = Math.round((saldoFinal-ValorInteiro)*100).toString().padStart(2, '0');;
-
+    
+    
     const [mesSelecionado, setMesSelecionado] = useState(meses[0]);
     
     const [mesDesejado, setMesDesejado] = useState('');
-
+    
     const [modalView, setModalView] = useState(false); 
     const [modalAddView, setModalAddView] = useState(false); 
     const [receita, setReceita] = useState(false);
     const [despesa, setDespesa] = useState(false);
-
+    
     const [transacaoSelecionada, setTransacaoSelecionada] = useState(null);
-
-
+    
+    
     const handleMesSelecionado = (mes) => {
         setMesSelecionado(mes);
         if (mes === 'Out/25'){setMesDesejado('10')}
@@ -62,31 +53,52 @@ export default function Home(){
         else if (mes === 'Jan/25'){setMesDesejado('01')}
         else(setMesDesejado(''))
     };
-
+    
     const handleTransacaoPress = (item) => {
-    setTransacaoSelecionada(item); // salva os dados do item
-    setModalView(true); // abre o modal
+        setTransacaoSelecionada(item); // salva os dados do item
+        setModalView(true); // abre o modal
     };
-
+    
     const transacoesDoMes = useMemo(() => {
-    return receitas.filter(item => {
-        const mesDaTransacao = item.data.split('/')[1];
-        return mesDaTransacao === mesDesejado;
-    });
-}, [receitas, mesDesejado]); 
+        return receitas.filter(item => {
+            const mesDaTransacao = item.data.split('/')[1];
+            return mesDaTransacao === mesDesejado;
+        });
+    }, [receitas, mesDesejado]); 
+    
+    
+    const totalReceitas = receitas 
+    .filter(item => item.tipo === 'receita') // Filtra apenas as receitas
+    .reduce((acumulador, item) => acumulador + item.valor, 0); // Soma os valores
+    
+    const totalDespesas = receitas
+    .filter(item => item.tipo === 'despesa') // Filtra apenas as despesas
+    .reduce((acumulador, item) => acumulador + item.valor, 0); // Soma os valores
 
-/*
-const limparReceitas = async () => {
-  setReceitas([]); // limpa o estado
-  try {
-    await AsyncStorage.removeItem('@financas'); // remove do armazenamento local
-  } catch (erro) {
-    console.log("Erro ao limpar AsyncStorage:", erro);
-  }
-};
-*/
+    const totalReceitasDoMes = transacoesDoMes 
+    .filter(item => item.tipo === 'receita') // Filtra apenas as receitas
+    .reduce((acumulador, item) => acumulador + item.valor, 0); // Soma os valores
+    
+    const totalDespesasDoMes = transacoesDoMes
+    .filter(item => item.tipo === 'despesa') // Filtra apenas as despesas
+    .reduce((acumulador, item) => acumulador + item.valor, 0); // Soma os valores
 
-  useEffect(() => {
+    const saldoFinal = totalReceitas - totalDespesas;
+    const ValorInteiro = Math.floor(saldoFinal);
+    const Centavos = Math.round((saldoFinal-ValorInteiro)*100).toString().padStart(2, '0');;
+
+    /*
+    const limparReceitas = async () => {
+        setReceitas([]); // limpa o estado
+        try {
+            await AsyncStorage.removeItem('@financas'); // remove do armazenamento local
+            } catch (erro) {
+                console.log("Erro ao limpar AsyncStorage:", erro);
+                }
+                };
+                */
+               
+               useEffect(() => {
     const carregarDados = async () => {
       try {
         const dadosSalvos = await AsyncStorage.getItem('@financas');
@@ -124,18 +136,46 @@ const limparReceitas = async () => {
                     <Image source={user} style={{alignSelf:'end',resizeMode:'contain'}}></Image>
                 </TouchableOpacity>
             </View>
+            
             <Card style={{alignSelf:'center'}}>
-                <View style={{flexDirection:'row', gap:10}}>
-                    <Texto style={{color:'white'}}>
-                        Saldo atual
-                    </Texto>
-                    <Image source={olho} style={{resizeMode:'contain', width:13, height:9, alignSelf:'center',marginBottom:4}}></Image>
+
+                
+           {mesSelecionado == "Geral" &&(
+            <View style={{flexDirection:'row', gap:10, marginLeft:8}}>
+                <Texto style={{color:'white'}}>
+                    Saldo atual
+                </Texto>
+                <Image source={olho} style={{resizeMode:'contain', width:13, height:9, alignSelf:'center',marginBottom:4}}></Image>
+            </View>)}
+
+            {mesSelecionado == "Geral" &&(
+            <View style={{flexDirection:'row', alignItems:'flex-start', padding:3, marginLeft:8}}>
+                <Texto style={{color:'white',justifyContent:'end'}}>R$</Texto><Titulo style={{alignSelf:'start', color:'white', marginTop:-16}}>{saldoFinal}</Titulo><Texto style={{color:'white'}}>,{Centavos}</Texto>
+            </View>)}
+
+            {mesSelecionado != "Geral" &&(
+            <View style={{flexDirection:'row', gap:10}}>
+                <Texto style={{color:'white', flex:1, marginLeft:8}}>
+                    Receita mensal
+                </Texto>
+                <Texto style={{color:'white', flex:1}}>
+                    Despesa mensal
+                </Texto>
+            </View>)}
+
+            {mesSelecionado != "Geral" &&(
+            <View style={{flexDirection:'row', marginLeft:8}}>
+                <View style={{flexDirection:'row', padding:3, flex:1}}>
+                    <Texto style={{color:'white'}}>R$</Texto><Titulo style={{alignSelf:'start', color:'white', marginTop:-16}}>{totalReceitasDoMes}</Titulo><Texto style={{color:'white'}}>,{Centavos}</Texto>
                 </View>
-                <View style={{flexDirection:'row', alignItems:'flex-start', padding:3}}>
-                    <Texto style={{color:'white',justifyContent:'end'}}>R$</Texto><Titulo style={{alignSelf:'start', color:'white', marginTop:-16}}>{saldoFinal}</Titulo><Texto style={{color:'white'}}>,{Centavos}</Texto>
+                <View style={{flexDirection:'row', padding:3, flex:1}}>
+                    <Texto style={{color:'white'}}>R$</Texto><Titulo style={{alignSelf:'start', color:'white', marginTop:-16}}>{totalDespesasDoMes}</Titulo><Texto style={{color:'white'}}>,{Centavos}</Texto>
                 </View>
-                <View style={{flexDirection:'row', gap:16, marginTop:-10}}>
-                    <BotaoAdd onPress={() => {setModalAddView(true); setReceita(true); setDespesa(false)}}>
+            </View>
+        )}
+                
+                <View style={{flexDirection:'row', gap:16, marginTop:-10, marginHorizontal:8}}>
+                    <BotaoAdd onPress={() => {setModalAddView(true); setReceita(true); setDespesa(false); console.log(transacoesDoMes)}}>
                         <View style={{flexDirection:'row', justifyContent:'space-between'}}>
                             <Texto style={{color:'#34A853'}}>Receitas</Texto>
                             <Image source={addReceita}></Image>
@@ -150,11 +190,11 @@ const limparReceitas = async () => {
                 </View>
             </Card>
 
-            {receitas.length > 0 &&(
+            
             <MesesScroll
                 mesSelecionado={mesSelecionado}
                 handleMesSelecionado={handleMesSelecionado}
-                TextoComponent={Texto} />)}
+                TextoComponent={Texto} />
 
             {receitas.length > 0 &&(
             <ContainerSearch>

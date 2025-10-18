@@ -47,6 +47,7 @@ const [descricao, setDescricao] = useState(null);
             }
             
             setReceitas(prev => [...prev, novaReceita]);
+            alert("Receita adicionada com sucesso!")
             setModalAddView(false);
             limparInputs();
   };
@@ -68,6 +69,7 @@ const [descricao, setDescricao] = useState(null);
             }
 
             setReceitas(prev => [...prev, novaDespesa]);
+            alert("Despesa adicionada com sucesso!")
             setModalAddView(false);
             limparInputs();
             
