@@ -24,9 +24,6 @@ export default function Home(){
 
     const [receitas, setReceitas] = useState([]);
     
-
-    
-    
     const [mesSelecionado, setMesSelecionado] = useState(meses[0]);
     
     const [mesDesejado, setMesDesejado] = useState('');
