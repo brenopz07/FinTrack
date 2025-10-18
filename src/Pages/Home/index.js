@@ -75,6 +75,10 @@ export default function Home(){
     .filter(item => item.tipo === 'despesa') // Filtra apenas as despesas
     .reduce((acumulador, item) => acumulador + item.valor, 0); // Soma os valores
 
+    const saldoFinal = totalReceitas - totalDespesas;
+    const ValorInteiro = Math.floor(saldoFinal); 
+    const Centavos = Math.round((saldoFinal-ValorInteiro)*100).toString().padStart(2, '0');
+    
     const totalReceitasDoMes = transacoesDoMes 
     .filter(item => item.tipo === 'receita') // Filtra apenas as receitas
     .reduce((acumulador, item) => acumulador + item.valor, 0); // Soma os valores
@@ -83,9 +87,15 @@ export default function Home(){
     .filter(item => item.tipo === 'despesa') // Filtra apenas as despesas
     .reduce((acumulador, item) => acumulador + item.valor, 0); // Soma os valores
 
-    const saldoFinal = totalReceitas - totalDespesas;
-    const ValorInteiro = Math.floor(saldoFinal);
-    const Centavos = Math.round((saldoFinal-ValorInteiro)*100).toString().padStart(2, '0');;
+    const ReceitaInteiro = Math.floor(totalReceitasDoMes);
+    const ReceitaCentavos = Math.round((totalReceitasDoMes - ReceitaInteiro) * 100)
+    .toString()
+    .padStart(2, '0');
+
+    const DespesaInteiro = Math.floor(totalDespesasDoMes);
+    const DespesaCentavos = Math.round((totalDespesasDoMes - DespesaInteiro) * 100)
+    .toString()
+    .padStart(2, '0');
 
     /*
     const limparReceitas = async () => {
@@ -150,7 +160,7 @@ export default function Home(){
 
             {mesSelecionado == "Geral" &&(
             <View style={{flexDirection:'row', alignItems:'flex-start', padding:3, marginLeft:8}}>
-                <Texto style={{color:'white',justifyContent:'end'}}>R$</Texto><Titulo style={{alignSelf:'start', color:'white', marginTop:-16}}>{saldoFinal}</Titulo><Texto style={{color:'white'}}>,{Centavos}</Texto>
+                <Texto style={{color:'white',justifyContent:'end'}}>R$</Texto><Titulo style={{alignSelf:'start', color:'white', marginTop:-16}}>{ValorInteiro}</Titulo><Texto style={{color:'white'}}>,{Centavos}</Texto>
             </View>)}
 
             {mesSelecionado != "Geral" &&(
@@ -166,10 +176,10 @@ export default function Home(){
             {mesSelecionado != "Geral" &&(
             <View style={{flexDirection:'row', marginLeft:8}}>
                 <View style={{flexDirection:'row', padding:3, flex:1}}>
-                    <Texto style={{color:'white'}}>R$</Texto><Titulo style={{alignSelf:'start', color:'white', marginTop:-16}}>{totalReceitasDoMes}</Titulo><Texto style={{color:'white'}}>,{Centavos}</Texto>
+                    <Texto style={{color:'white'}}>R$</Texto><Titulo style={{alignSelf:'start', color:'white', marginTop:-16}}>{ReceitaInteiro}</Titulo><Texto style={{color:'white'}}>,{ReceitaCentavos}</Texto>
                 </View>
                 <View style={{flexDirection:'row', padding:3, flex:1}}>
-                    <Texto style={{color:'white'}}>R$</Texto><Titulo style={{alignSelf:'start', color:'white', marginTop:-16}}>{totalDespesasDoMes}</Titulo><Texto style={{color:'white'}}>,{Centavos}</Texto>
+                    <Texto style={{color:'white'}}>R$</Texto><Titulo style={{alignSelf:'start', color:'white', marginTop:-16}}>{DespesaInteiro}</Titulo><Texto style={{color:'white'}}>,{DespesaCentavos}</Texto>
                 </View>
             </View>
         )}
