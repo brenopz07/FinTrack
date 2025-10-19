@@ -18,6 +18,7 @@ export default function ModalUser({ modalUserView, setModalUserView, nome, setNo
   const [deslogar, setDeslogar] = useState(false);
   const [editNome, setEditNome] = useState(false);
   const [novoNome, setNovoNome] = useState(nome);
+  const [email, setEmail] = useState('');
 
 const atualizarNome = async () => {
   try {
@@ -33,7 +34,7 @@ const atualizarNome = async () => {
       );
 
       await AsyncStorage.setItem('usuarios', JSON.stringify(usuariosAtualizados));
-      await AsyncStorage.setItem('usuarioLogado', JSON.stringify({ ...user, nome: novoNome }));
+      await AsyncStorage.setItem('usuarioLogado', JSON.stringify({ ...user, nome: novoNome}));
     }
 
     await AsyncStorage.setItem('@nomeUsuario', novoNome);
@@ -43,6 +44,22 @@ const atualizarNome = async () => {
     console.log("Erro ao salvar nome:", erro);
   }
 };
+
+  useEffect(() => {
+    const carregarEmail = async () => {
+      try {
+        const usuarioLogado = await AsyncStorage.getItem('usuarioLogado');
+        if (usuarioLogado) {
+          const user = JSON.parse(usuarioLogado);
+          setEmail(user.email);
+        }
+      } catch (erro) {
+        console.log('Erro ao carregar email:', erro);
+      }
+    };
+
+    carregarEmail();
+  }, []);
 
   const alternarTema = () => {
     setSelecionado(!selecionado);
@@ -96,16 +113,16 @@ const atualizarNome = async () => {
                     </TouchableOpacity>
                   )}
 
-  <TouchableOpacity onPress={() => setEditNome(true)} style={{ paddingHorizontal: 4 }}>
-    <Image source={edit} style={{ width: 18, height: 18 }} />
-  </TouchableOpacity>
-</View>
+                <TouchableOpacity onPress={() => setEditNome(true)} style={{ paddingHorizontal: 4 }}>
+                  <Image source={edit} style={{ width: 18, height: 18 }} />
+                </TouchableOpacity>
+              </View>
             </Container>
 
             <Container>
               <Texto style={{ color: '#595959' }}>Email</Texto>
               <View style={{ flexDirection: 'row', gap: 8, justifyContent: 'center' }}>
-                <Texto>{'email' || "breno@gmail.com"}</Texto>
+                <Texto>{email}</Texto>
               </View>
             </Container>
 

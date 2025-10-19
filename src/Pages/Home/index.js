@@ -26,13 +26,15 @@ export default function Home(){
     const route = useRoute();
     const { nome, email } = route.params || {};
     const [nomeUsuario, setNomeUsuario] = useState(nome || '');
+    const [emailUsuario, setEmailUsuario] = useState(email || '');
+
     const [receitas, setReceitas] = useState([]);
     const [mesSelecionado, setMesSelecionado] = useState(meses[0]);
-    
     const [mesDesejado, setMesDesejado] = useState('');
     
     const [modalView, setModalView] = useState(false); 
     const [modalAddView, setModalAddView] = useState(false); 
+
     const [receita, setReceita] = useState(false);
     const [despesa, setDespesa] = useState(false);
     
@@ -249,7 +251,7 @@ export default function Home(){
 
         <ModalAdiciona modalAddView={modalAddView} setModalAddView={setModalAddView} despesa={despesa} receita={receita} receitas={receitas} setReceitas={setReceitas}></ModalAdiciona>
 
-        <ModalUser modalUserView={modalUserView} setModalUserView={setModalUserView} nome={nomeUsuario} setNome={setNomeUsuario} />
+        <ModalUser modalUserView={modalUserView} setModalUserView={setModalUserView} nome={nomeUsuario} setNome={setNomeUsuario}/>
     </View>
 
     )
