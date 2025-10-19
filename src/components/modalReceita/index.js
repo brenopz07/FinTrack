@@ -10,10 +10,12 @@ import apagar from '../../assets/excluir.png'
 import editar from '../../assets/editar.png'
 import { useEffect, useState } from "react";
 import ModalConfirm from "../modalConfirm";
+import CalendarModal from "../CalendarModal";
 
 
 export default function ModalReceita({modalView, setModalView, transacao, receitas, setReceitas}){
     const [modalConfirmView,setModalConfirmView] = useState(false);
+    const [showCalendar, setShowCalendar] = useState(false)
     const [edit, setEdit] = useState(false)
 
     const [novoTitulo, setNovoTitulo] = useState(transacao?.titulo);
@@ -162,19 +164,18 @@ export default function ModalReceita({modalView, setModalView, transacao, receit
                         <View>
                             <MiniTexto>Data</MiniTexto>
                             {edit ? (
-                        <TextoInput
-                        value={novaData}
-                        onChangeText={setNovaData}
-                        style={{
-                            marginRight: 10,
-                        }}
-                        autoFocus
-                        onSubmitEditing={atualizar}
-                        blurOnSubmit={true}
-                        />
-                    ) : (
-                            <Texto>{transacao.data}</Texto>)}
+                                <Pressable onPress={() => setShowCalendar(true)}>
+                                <TextoInput
+                                    value={novaData}
+                                    style={{ marginRight: 10 }}
+                                    editable={false} // impede edição manual
+                                />
+                                </Pressable>
+                            ) : (
+                                <Texto>{transacao.data}</Texto>
+                            )}
                         </View>
+
                         <View style={{}}>
                             <MiniTexto>Valor</MiniTexto>
                             <View style={{flexDirection:'row'}}>
@@ -213,6 +214,7 @@ export default function ModalReceita({modalView, setModalView, transacao, receit
             </CardModal>
         </Pressable>
       </Pressable>
+      <CalendarModal showCalendar={showCalendar} setShowCalendar={setShowCalendar} data={novaData} setData={setNovaData}/>
     </Modal>
     );
 }

@@ -21,7 +21,6 @@ import ModalConfirm from '../../components/modalConfirm';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Home(){
-
     const [receitas, setReceitas] = useState([]);
     
     const [mesSelecionado, setMesSelecionado] = useState(meses[0]);
@@ -93,7 +92,7 @@ export default function Home(){
     const DespesaCentavos = Math.round((totalDespesasDoMes - DespesaInteiro) * 100)
     .toString()
     .padStart(2, '0');
-
+    
     /*
     const limparReceitas = async () => {
         setReceitas([]); // limpa o estado
@@ -182,7 +181,7 @@ export default function Home(){
         )}
                 
                 <View style={{flexDirection:'row', gap:16, marginTop:-10, marginHorizontal:8}}>
-                    <BotaoAdd onPress={() => {setModalAddView(true); setReceita(true); setDespesa(false); console.log(transacoesDoMes)}}>
+                    <BotaoAdd onPress={() => {setModalAddView(true); setReceita(true); setDespesa(false); console.log(transacoesDoMes); console.log(receitas)}}>
                         <View style={{flexDirection:'row', justifyContent:'space-between'}}>
                             <Texto style={{color:'#34A853'}}>Receitas</Texto>
                             <Image source={addReceita}></Image>
@@ -236,7 +235,7 @@ export default function Home(){
         onTransacaoPress={handleTransacaoPress}/>
         
 
-        <ModalReceita modalView={modalView} setModalView={setModalView} transacao={transacaoSelecionada} receita={receita} setReceita={setReceita} receitas={receitas} setReceitas={setReceitas}/>
+        <ModalReceita modalView={modalView} setModalView={setModalView} transacao={transacaoSelecionada} receita={receita} setReceita={setReceita} receitas={receitas} setReceitas={setReceitas} />
 
         <ModalAdiciona modalAddView={modalAddView} setModalAddView={setModalAddView} despesa={despesa} receita={receita} receitas={receitas} setReceitas={setReceitas}></ModalAdiciona>
 
