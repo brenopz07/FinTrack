@@ -43,7 +43,7 @@ export default function ModalConfirm({modalConfirmView, setModalConfirmView, tra
                                 <Texto style={{textAlign:'center'}}>{deslogar ? 'Ao sair, será necessário inserir novamente suas credenciais para acessar.' : 'Essa ação náo pode ser desfeita. Por favor, confirme se deseja prosseguir.'}</Texto>
                             </View>
                             <View style={{flexDirection:'row',gap:16, width:'100%'}}>
-                                <BotaoConfirmar onPress={() => {(deslogar) ? navigation.navigate('Login') : excluirReceita(transacao.id) ,setModalConfirmView(false), setModalUserView(false)}}>
+                                <BotaoConfirmar onPress={() => {(deslogar) ? (navigation.navigate('Login'), setModalUserView(false)) : (excluirReceita(transacao.id), setModalConfirmView(false))}}>
                                     <Texto style={{alignSelf:'center',color:'#FFFFFF'}}>Confirmar</Texto>
                                 </BotaoConfirmar>
                                 <BotaoCancelar onPress={() => {setModalConfirmView(false)}}>

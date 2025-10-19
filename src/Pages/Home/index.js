@@ -114,11 +114,11 @@ export default function Home(){
     useEffect(() => {
     const carregarDados = async () => {
       try {
-        const dadosSalvos = await AsyncStorage.getItem('@financas');
+        const dadosSalvos = await AsyncStorage.getItem(`@financas_${emailUsuario}`);
         if (dadosSalvos) {
           setReceitas(JSON.parse(dadosSalvos));
         }
-        const nomeSalvo = await AsyncStorage.getItem('@nomeUsuario');
+        const nomeSalvo = await AsyncStorage.getItem(`@nomeUsuario_${emailUsuario}`);
       if (nomeSalvo) {
         setNomeUsuario(nomeSalvo);
         console.log(nomeSalvo)
@@ -134,7 +134,7 @@ export default function Home(){
   useEffect(() => {
     const salvarDados = async () => {
       try {
-        await AsyncStorage.setItem('@financas', JSON.stringify(receitas));
+        await AsyncStorage.setItem(`@financas_${emailUsuario}`, JSON.stringify(receitas));
       } catch (erro) {
         console.log('Erro ao salvar dados: ', erro);
       }
@@ -193,7 +193,7 @@ export default function Home(){
         )}
                 
                 <View style={{flexDirection:'row', gap:16, marginTop:-10, marginHorizontal:8}}>
-                    <BotaoAdd onPress={() => {setModalAddView(true); setReceita(true); setDespesa(false); console.log(transacoesDoMes); console.log(receitas)}}>
+                    <BotaoAdd onPress={() => {setModalAddView(true); setReceita(true); setDespesa(false); console.log(transacoesDoMes);}}>
                         <View style={{flexDirection:'row', justifyContent:'space-between'}}>
                             <Texto style={{color:'#34A853'}}>Receitas</Texto>
                             <Image source={addReceita}></Image>

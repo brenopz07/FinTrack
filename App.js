@@ -6,6 +6,7 @@ import Routes from './src/Routes/index';
 import { View } from 'react-native';
 
 
+
 export default function App() {
   let [fontsLoaded] = useFonts({
     Poppins_Regular: Poppins_400Regular,

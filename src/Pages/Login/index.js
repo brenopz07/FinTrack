@@ -14,17 +14,23 @@ import visualizar from '../../assets/olho.png'
 
 import { useNavigation } from '@react-navigation/native';
 
+import AuthRoutes from '../../Routes/auth.routes';
+import AppRoutes from '../../Routes';
+
 export default function Login(){
 
 const navigation = useNavigation();
 
-const [selecionado, setSelecionado] = useState(null);
-const [email, setEmail] = useState('');
-const [senha, setSenha] = useState('');
+const [selecionado, setSelecionado] = useState(false);
+const [email, setEmail] = useState(null);
+const [senha, setSenha] = useState(null);
 
 const [mensagem, setMensagem] = useState('');
 
 const[visualizarSenha, setVisualizarSenha] = useState(true);
+
+const [conectado, setConectado] = useState(false);
+
 
 const mostrarSenha = () => {
     setVisualizarSenha(false)
@@ -42,6 +48,7 @@ const handleSelect = () => {
  const handleLogin = async () => {
     if (!email || !senha) {
       setMensagem('Preencha todos os campos');
+      setConectado(false);
       return;
     }
 
@@ -56,19 +63,18 @@ const handleSelect = () => {
       console.log(usuarioEncontrado)
       if (!usuarioEncontrado) {
         setMensagem('Email ou senha incorretos');
+        setConectado(false);
         return;
       }
-
-      // Salva o usuário logado (opcional, para manter sessão)
       await AsyncStorage.setItem('usuarioLogado', JSON.stringify(usuarioEncontrado));
-
+      if (selecionado){
+        setConectado(true);
+      }
       navigation.navigate('Home', { 
           nome: usuarioEncontrado.nome, 
           email: usuarioEncontrado.email 
         });
         console.log('Usuário logado:', usuarioEncontrado);
-      // Aqui você pode redirecionar para outra tela (ex: home)
-      // navigation.navigate('Home');
 
       setEmail('');
       setSenha('');
@@ -79,7 +85,6 @@ const handleSelect = () => {
   };
 
     return(
-
     <Background>
         <View style={{marginHorizontal:30, marginTop:25, justifyContent:'space-between', flexDirection:'row', alignItems:'center'}}>
             <TouchableOpacity onPress={ () => navigation.navigate('Inicial') }>
@@ -173,7 +178,7 @@ const handleSelect = () => {
 
                         <BotaoGradientBackground>
                             <ButtonTouchable>
-                                <ButtonText onPress={handleLogin}>
+                                <ButtonText onPress={() => {handleLogin(), console.log(conectado)}}>
                                     Confirmar
                                 </ButtonText>
                             </ButtonTouchable>
@@ -181,14 +186,14 @@ const handleSelect = () => {
                         
                         <View style={{flexDirection:'row', gap:5, alignItems:'center', borderRadius:2}}>
                             <TouchableOpacity onPress={handleSelect}>
-                                <Image source={selecionado ? checkboxTrue : checkboxFalse} style={{width:12, height:12, resizeMode:'contain', marginBottom:1.8, marginLeft:3 }}></Image>
+                                <Image source={!selecionado ? checkboxTrue : checkboxFalse} style={{width:12, height:12, resizeMode:'contain', marginBottom:1.8, marginLeft:3 }}></Image>
                             </TouchableOpacity>
                             <MiniTexto>
                                 Continuar conectado
                             </MiniTexto>
                         </View>
-
                     </View>
+                        <AppRoutes conectado={conectado}/>
                 </View>
             </Card>
     </Background>
