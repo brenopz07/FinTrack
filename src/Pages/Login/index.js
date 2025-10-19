@@ -62,9 +62,11 @@ const handleSelect = () => {
       // Salva o usuário logado (opcional, para manter sessão)
       await AsyncStorage.setItem('usuarioLogado', JSON.stringify(usuarioEncontrado));
 
-      Alert.alert('Sucesso', `Bem-vindo, ${usuarioEncontrado.nome}!`);
-      console.log('Usuário logado:', usuarioEncontrado);
-      navigation.navigate('Home');
+      navigation.navigate('Home', { 
+          nome: usuarioEncontrado.nome, 
+          email: usuarioEncontrado.email 
+        });
+        console.log('Usuário logado:', usuarioEncontrado);
       // Aqui você pode redirecionar para outra tela (ex: home)
       // navigation.navigate('Home');
 

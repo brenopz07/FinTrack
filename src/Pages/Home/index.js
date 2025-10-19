@@ -19,10 +19,14 @@ import ModalReceita from '../../components/modalReceita';
 import ModalAdiciona from '../../components/modalAdd';
 import ModalConfirm from '../../components/modalConfirm';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ModalUser from '../../components/ModalUser';
+import { useRoute } from '@react-navigation/native';
 
 export default function Home(){
+    const route = useRoute();
+    const { nome, email } = route.params || {};
+    const [nomeUsuario, setNomeUsuario] = useState(nome || '');
     const [receitas, setReceitas] = useState([]);
-    
     const [mesSelecionado, setMesSelecionado] = useState(meses[0]);
     
     const [mesDesejado, setMesDesejado] = useState('');
@@ -33,7 +37,8 @@ export default function Home(){
     const [despesa, setDespesa] = useState(false);
     
     const [transacaoSelecionada, setTransacaoSelecionada] = useState(null);
-    
+
+    const [modalUserView, setModalUserView] = useState(false); 
     
     const handleMesSelecionado = (mes) => {
         setMesSelecionado(mes);
@@ -104,13 +109,18 @@ export default function Home(){
                 };
                 */
                
-               useEffect(() => {
+    useEffect(() => {
     const carregarDados = async () => {
       try {
         const dadosSalvos = await AsyncStorage.getItem('@financas');
         if (dadosSalvos) {
           setReceitas(JSON.parse(dadosSalvos));
         }
+        const nomeSalvo = await AsyncStorage.getItem('@nomeUsuario');
+      if (nomeSalvo) {
+        setNomeUsuario(nomeSalvo);
+        console.log(nomeSalvo)
+      }
       } catch (erro) {
         console.log('Erro ao carregar dados: ', erro);
       }
@@ -138,7 +148,7 @@ export default function Home(){
                     <Image source={logo} style={{width:28, height:28, resizeMode:'contain'}}></Image>
                     <SubTitulo style={{paddingLeft:8, color:'#4285F4'}}>FinTrack</SubTitulo>
                 </View>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => setModalUserView(true)}>
                     <Image source={user} style={{alignSelf:'end',resizeMode:'contain'}}></Image>
                 </TouchableOpacity>
             </View>
@@ -226,7 +236,7 @@ export default function Home(){
 
         {receitas.length === 0 &&(
             <View style={{alignSelf:'center'}}>
-                <SubTitulo style={{color:'#4285F4', textAlign:'center', margin:30}}>Adicione suas transacoes e controle o seu dinheiro</SubTitulo>
+                <SubTitulo style={{color:'#4285F4', margin:30}}>Seja bem-vindo, {nomeUsuario}!</SubTitulo>
             </View>
         )}
             
@@ -239,7 +249,7 @@ export default function Home(){
 
         <ModalAdiciona modalAddView={modalAddView} setModalAddView={setModalAddView} despesa={despesa} receita={receita} receitas={receitas} setReceitas={setReceitas}></ModalAdiciona>
 
-     
+        <ModalUser modalUserView={modalUserView} setModalUserView={setModalUserView} nome={nomeUsuario} setNome={setNomeUsuario} />
     </View>
 
     )

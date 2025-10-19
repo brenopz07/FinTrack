@@ -12,13 +12,6 @@ function AuthRoutes(){
   return(
     <AuthStack.Navigator>
       <AuthStack.Screen 
-        name="Home"
-        component={Home}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <AuthStack.Screen 
         name="Inicial"
         component={Inicial}
         options={{
@@ -39,6 +32,14 @@ function AuthRoutes(){
           headerShown: false,
         }}
       />
+      <AuthStack.Screen 
+        name="Home"
+        component={Home}
+        options={{
+          headerShown: false,
+        }}
+      />
+      
       
     </AuthStack.Navigator>
   )

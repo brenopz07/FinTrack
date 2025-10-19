@@ -7,9 +7,12 @@ import { SubTitulo, Texto, Titulo } from "../../Styleguide/styles";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 
-export default function ModalConfirm({modalConfirmView, setModalConfirmView, transacao, receitas, setReceitas, modalView, setModalView}){
+export default function ModalConfirm({modalConfirmView, setModalConfirmView, transacao, receitas, setReceitas, modalView, setModalView, deslogar, setDeslogar, setModalUserView}){
      
+  const navigation = useNavigation();
+
   const excluirReceita = (id) => {
     const novaLista = receitas.filter((transacao) => transacao.id !== id);
     setReceitas(novaLista);
@@ -37,10 +40,10 @@ export default function ModalConfirm({modalConfirmView, setModalConfirmView, tra
                             <Image source={aviso} style={{width:66, height:60}}></Image>
                             <View style={{alignItems:'center', marginHorizontal:20}}>
                                 <SubTitulo>Tem certeza disso? </SubTitulo>
-                                <Texto>Essa ação náo pode ser desfeita. Por favor, confirme se deseja prosseguir.</Texto>
+                                <Texto style={{textAlign:'center'}}>{deslogar ? 'Ao sair, será necessário inserir novamente suas credenciais para acessar.' : 'Essa ação náo pode ser desfeita. Por favor, confirme se deseja prosseguir.'}</Texto>
                             </View>
                             <View style={{flexDirection:'row',gap:16, width:'100%'}}>
-                                <BotaoConfirmar onPress={() => {excluirReceita(transacao.id) ,setModalConfirmView(false)}}>
+                                <BotaoConfirmar onPress={() => {(deslogar) ? navigation.navigate('Login') : excluirReceita(transacao.id) ,setModalConfirmView(false), setModalUserView(false)}}>
                                     <Texto style={{alignSelf:'center',color:'#FFFFFF'}}>Confirmar</Texto>
                                 </BotaoConfirmar>
                                 <BotaoCancelar onPress={() => {setModalConfirmView(false)}}>
