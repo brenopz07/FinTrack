@@ -2,84 +2,120 @@ import { Modal, Pressable, TouchableOpacity, View } from "react-native";
 import { useState } from "react";
 import styled from "styled-components/native";
 import { Calendar } from "react-native-calendars";
-
-import { 
-  BotaoGradientBackground, 
-  ButtonTouchable, 
-  LabelInput, 
-  MiniTexto, 
-  SubTitulo, 
-  Texto, 
-  TextoInput 
+import { useEffect } from "react";
+import { listarCategorias } from "../../services/categoryService";
+import { Picker } from "@react-native-picker/picker"; // precisa instalar se não tiver
+import { cadastrarTransacao } from "../../services/transactionService";
+import {
+  BotaoGradientBackground,
+  ButtonTouchable,
+  LabelInput,
+  MiniTexto,
+  SubTitulo,
+  Texto,
+  TextoInput,
 } from "../../Styleguide/styles";
 
 import { CardModal, Linha } from "../modalReceita";
 import { BotaoCancelar } from "../modalConfirm";
 import CalendarModal from "../CalendarModal";
 
-export default function ModalAdiciona({ modalAddView, setModalAddView, receita, receitas, setReceitas }) {
-const hoje = new Date();
-const dataFormatada = `${hoje.getDate().toString().padStart(2,'0')}/${(hoje.getMonth()+1).toString().padStart(2,'0')}/${hoje.getFullYear()}`;
+export default function ModalAdiciona({
+  modalAddView,
+  setModalAddView,
+  receita,
+  receitas,
+  setReceitas,
+}) {
+  const hoje = new Date();
+  const dataFormatada = `${hoje.getDate().toString().padStart(2, "0")}/${(
+    hoje.getMonth() + 1
+  )
+    .toString()
+    .padStart(2, "0")}/${hoje.getFullYear()}`;
 
-  const [valor, setValor] = useState('');
-  const [titulo, setTitulo] = useState('');
+  const [valor, setValor] = useState("");
+  const [titulo, setTitulo] = useState("");
   const [data, setData] = useState(dataFormatada);
-  const [categoria, setCategoria] = useState('');
-  const [descricao, setDescricao] = useState('');
+  const [categorias, setCategorias] = useState([]);
+  const [categoriaSelecionada, setCategoriaSelecionada] = useState("");
+
+  const [descricao, setDescricao] = useState("");
   const [showCalendar, setShowCalendar] = useState(false);
+  useEffect(() => {
+    async function carregarCategorias() {
+      try {
+        const data = await listarCategorias();
+        setCategorias(data);
+      } catch (error) {
+        console.error("Erro ao carregar categorias:", error);
+      }
+    }
+
+    carregarCategorias();
+  }, []);
 
   const limparInputs = () => {
-    setValor('');
-    setTitulo('');
+    setValor("");
+    setTitulo("");
+    setCategoriaSelecionada("")
     setData(dataFormatada);
-    setCategoria('');
-    setDescricao('');
+    setDescricao("");
   };
 
-  const adicionarItem = () => {
-    if (!titulo || !valor || !data || !descricao || !categoria) {
+  const adicionarItem = async () => {
+    if (!titulo || !valor || !data || !descricao || !categoriaSelecionada) {
       alert("Preencha todos os campos para confirmar");
       return;
     }
 
-    const novoItem = {
-      id: Date.now().toString(),
-      tipo: receita ? 'receita' : 'despesa',
-      titulo,
-      valor : Number(String(valor).replace(/\./g, '').replace(',', '.')),
-      data,
-      descricao,
-      categoria,
-    };
+    try {
+      const valorNumerico = Number(
+        String(valor).replace(/\./g, "").replace(",", ".")
+      );
 
-    setReceitas(prev => [...prev, novoItem]);
-    alert(`${receita ? 'Receita' : 'Despesa'} adicionada com sucesso!`);
-    setModalAddView(false);
-    limparInputs();
+      const [dia, mes, ano] = data.split("/");
+      const dataISO = new Date(`${ano}-${mes}-${dia}T12:00:00Z`).toISOString();
+
+      const novaTransacao = {
+        category_id: categoriaSelecionada,
+        name: titulo,
+        amount: valorNumerico,
+        type: receita ? "income" : "expense",
+        description: descricao,
+        date: dataISO,
+      };
+
+      await cadastrarTransacao(novaTransacao);
+
+      alert(`${receita ? "Receita" : "Despesa"} cadastrada com sucesso!`);
+      setModalAddView(false);
+      limparInputs();
+    } catch (error) {
+      console.error("Erro ao cadastrar transação:", error);
+      alert("Não foi possível cadastrar a transação.");
+    }
   };
+  const handleChange = (texto) => {
+    // Remove tudo que não for número
+    const numero = texto.replace(/\D/g, "");
 
- const handleChange = (texto) => {
-      // Remove tudo que não for número
-  const numero = texto.replace(/\D/g, '');
+    if (!numero) {
+      setValor("");
+      return;
+    }
 
-  if (!numero) {
-    setValor('');
-    return;
-  }
+    // Transforma em número com 2 casas decimais
+    const valor = Number(numero) / 100;
 
-  // Transforma em número com 2 casas decimais
-  const valor = Number(numero) / 100;
+    // Formata com vírgula e ponto de milhar
+    const valorFormatado = valor.toLocaleString("pt-BR", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
 
-  // Formata com vírgula e ponto de milhar
-  const valorFormatado = valor.toLocaleString('pt-BR', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
-
-  setValor(valorFormatado);
-};
-
-
+    setValor(valorFormatado);
+  };
 
   return (
     <Modal
@@ -150,12 +186,23 @@ const dataFormatada = `${hoje.getDate().toString().padStart(2,'0')}/${(hoje.getM
             </View>
 
             <LabelInput>
-              <MiniTexto style={{ marginBottom: -12 }}>Categoria</MiniTexto>
-              <TextoInput
-                placeholder="Digite aqui"
-                value={categoria}
-                onChangeText={setCategoria}
-              />
+              <MiniTexto style={{ marginBottom: 0 }}>Categoria</MiniTexto>
+              <Picker
+                selectedValue={categoriaSelecionada}
+                onValueChange={(itemValue) =>
+                  setCategoriaSelecionada(itemValue)
+                }
+                style={{
+                  backgroundColor: "#fff",
+                  borderRadius: 8,
+                  height: "30px",
+                }}
+              >
+                <Picker.Item label="Selecione uma categoria" value="" />
+                {categorias.map((cat) => (
+                  <Picker.Item key={cat.id} label={cat.name} value={cat.id} />
+                ))}
+              </Picker>
             </LabelInput>
 
             <View style={{ flexDirection: "row", gap: 16, width: "100%" }}>
@@ -175,7 +222,12 @@ const dataFormatada = `${hoje.getDate().toString().padStart(2,'0')}/${(hoje.getM
           </CardModal>
         </Pressable>
       </Pressable>
-      <CalendarModal showCalendar={showCalendar} setShowCalendar={setShowCalendar} data={data} setData={setData}/>
+      <CalendarModal
+        showCalendar={showCalendar}
+        setShowCalendar={setShowCalendar}
+        data={data}
+        setData={setData}
+      />
     </Modal>
   );
 }

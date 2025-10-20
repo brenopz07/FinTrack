@@ -11,7 +11,7 @@ import checkboxTrue from '../../assets/Checkbox.png'
 import checkboxFalse from '../../assets/Subtract.png'
 import error from '../../assets/Error icon.png'
 import visualizar from '../../assets/olho.png'
-
+import { loginUsuario } from '../../services/userService';
 import { useNavigation } from '@react-navigation/native';
 
 import AuthRoutes from '../../Routes/auth.routes';
@@ -45,44 +45,45 @@ const handleSelect = () => {
     };
     
     // Função principal de Login
- const handleLogin = async () => {
-    if (!email || !senha) {
-      setMensagem('Preencha todos os campos');
-      setConectado(false);
-      return;
-    }
-
-    try {
-      // Busca os usuários cadastrados
-      const usuariosSalvos = await AsyncStorage.getItem('usuarios');
-      const usuarios = usuariosSalvos ? JSON.parse(usuariosSalvos) : [];
-      // Verifica se existe o usuário com email e senha corretos
-      const usuarioEncontrado = usuarios.find(
-        (u) => u.email === email && u.senha === senha
-      );
-      console.log(usuarioEncontrado)
-      if (!usuarioEncontrado) {
-        setMensagem('Email ou senha incorretos');
-        setConectado(false);
-        return;
-      }
-      await AsyncStorage.setItem('usuarioLogado', JSON.stringify(usuarioEncontrado));
-      if (selecionado){
-        setConectado(true);
-      }
-      navigation.navigate('Home', { 
-          nome: usuarioEncontrado.nome, 
-          email: usuarioEncontrado.email 
-        });
-        console.log('Usuário logado:', usuarioEncontrado);
-
-      setEmail('');
-      setSenha('');
-    } catch (error) {
-      console.log('Erro no login:', error);
-      Alert.alert('Erro', 'Não foi possível fazer login');
-    }
-  };
+    const handleLogin = async () => {
+        if (!email || !senha) {
+          setMensagem('Preencha todos os campos');
+          setConectado(false);
+          return;
+        }
+      
+        try {
+          const data = await loginUsuario({ email, password: senha });
+      
+      
+          await AsyncStorage.setItem('token', data.token);
+          await AsyncStorage.setItem('usuarioLogado', JSON.stringify({
+            id: data.id,
+            nome: data.name,
+            email: data.email,
+          }));
+    
+          setMensagem('');
+          if (selecionado) {
+            setConectado(true);
+          }
+      
+          navigation.navigate('Home', { 
+            nome: data.name,
+            email: data.email,
+          });
+      
+          setEmail('');
+          setSenha('');
+      
+        } catch (error) {
+          console.log('Erro no login:', error);
+          const mensagemErro = error || 'Não foi possível fazer login.';
+          Alert.alert('Erro', mensagemErro);
+          setMensagem(mensagemErro);
+          setConectado(false);
+        }
+      };
 
     return(
     <Background>
