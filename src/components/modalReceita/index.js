@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import ModalConfirm from "../modalConfirm";
 import CalendarModal from "../CalendarModal";
 
+import { editarTransacao } from "../../services/api";
 
 export default function ModalReceita({modalView, setModalView, transacao, receitas, setReceitas}){
     const [modalConfirmView,setModalConfirmView] = useState(false);
@@ -44,6 +45,36 @@ export default function ModalReceita({modalView, setModalView, transacao, receit
       }
       return item;
     });
+
+/*
+const atualizar = async () => {
+  try {
+    const dataAtualizada = {
+      category_id: novaCategoria, // adapte conforme o id real da categoria
+      name: novoTitulo,
+      amount: Number(String(novoValor).replace(/\./g, '').replace(',', '.')),
+      type: transacao.tipo,
+      description: novaDescricao,
+      date: novaData,
+    };
+
+    await editarTransacao(transacao.id, dataAtualizada);
+
+    const transacaoAtualizada = receitas.map(item => {
+      if (item.id === transacao.id) {
+        return { ...item, ...dataAtualizada, valor: dataAtualizada.amount };
+      }
+      return item;
+    });
+
+    setReceitas(transacaoAtualizada);
+    setEdit(false);
+    setModalView(false);
+    alert('Transação atualizada com sucesso!');
+  } catch (error) {
+    alert(error);
+  }
+};*/ 
 
     setReceitas(transacaoAtualizada);
     setEdit(false);

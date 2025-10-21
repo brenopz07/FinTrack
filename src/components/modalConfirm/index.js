@@ -1,4 +1,4 @@
-import { Image, Modal, Pressable, View } from "react-native";
+import { Alert, Image, Modal, Pressable, View } from "react-native";
 import { CardModal } from "../modalReceita";
 import styled from "styled-components/native";
 
@@ -8,17 +8,27 @@ import { SubTitulo, Texto, Titulo } from "../../Styleguide/styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { excluirTransacao } from "../../services/transactionService";
 
 export default function ModalConfirm({modalConfirmView, setModalConfirmView, transacao, receitas, setReceitas, modalView, setModalView, deslogar, setDeslogar, setModalUserView}){
      
   const navigation = useNavigation();
-
-  const excluirReceita = (id) => {
+    
+const excluirReceita = async (id) => {
+  try {
+    await excluirTransacao(id); // chama a API para excluir
     const novaLista = receitas.filter((transacao) => transacao.id !== id);
-    setReceitas(novaLista);
+    setReceitas(novaLista); // atualiza o estado local
     setModalConfirmView(false);
     setModalView(false);
-  };
+    console.log(transacao)
+  } catch (error) {
+    alert(error); // mostra o erro se algo der errado
+  }
+};
+
+  
+
 
     return(
         <Modal
