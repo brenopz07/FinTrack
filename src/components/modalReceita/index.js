@@ -11,8 +11,9 @@ import editar from '../../assets/editar.png'
 import { useEffect, useState } from "react";
 import ModalConfirm from "../modalConfirm";
 import CalendarModal from "../CalendarModal";
+import { editarTransacao } from "../../services/transactionService";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { editarTransacao } from "../../services/api";
 
 export default function ModalReceita({modalView, setModalView, transacao, receitas, setReceitas}){
     const [modalConfirmView,setModalConfirmView] = useState(false);
@@ -37,50 +38,59 @@ export default function ModalReceita({modalView, setModalView, transacao, receit
     }// garante que o input não fique no modo edição por padrão
     }, [transacao]);
 
-    const atualizar = () => {
-    const transacaoAtualizada = receitas.map(item => {
-        console.log(novoValor)
-      if (item.id === transacao.id) {
-        return { ...item, titulo: novoTitulo, descricao: novaDescricao, categoria: novaCategoria, data: novaData, valor:Number(String(novoValor).replace(/\./g, '').replace(',', '.'))};
-      }
-      return item;
-    });
 
-/*
+function formatarDataParaISO(dataBR) {
+  if (!dataBR) return null;
+  const [dia, mes, ano] = dataBR.split("/");
+  return new Date(`${ano}-${mes}-${dia}T00:00:00.000Z`).toISOString();
+}
+
 const atualizar = async () => {
   try {
+    // converter valores e montar payload
     const dataAtualizada = {
-      category_id: novaCategoria, // adapte conforme o id real da categoria
+      user_id: transacao.user_id ?? null,
+      category_id: transacao.category_id, // ✅ usa o ID real da categoria
       name: novoTitulo,
       amount: Number(String(novoValor).replace(/\./g, '').replace(',', '.')),
-      type: transacao.tipo,
+      type: transacao.tipo === "receita" ? "INCOME" : "EXPENSE", // ✅ backend espera isso
       description: novaDescricao,
-      date: novaData,
+      date: formatarDataParaISO(novaData), // ✅ converte formato BR → ISO
+      file_url: null,
+      file: null,
     };
 
+    console.log("🟡 Enviando dados para atualização:", dataAtualizada);
+
+    // faz a requisição de atualização
     await editarTransacao(transacao.id, dataAtualizada);
 
-    const transacaoAtualizada = receitas.map(item => {
+    // atualiza estado local da lista
+    const listaAtualizada = receitas.map(item => {
       if (item.id === transacao.id) {
-        return { ...item, ...dataAtualizada, valor: dataAtualizada.amount };
+        return {
+          ...item,
+          ...dataAtualizada,
+          valor: dataAtualizada.amount,
+          data: novaData,
+          categoria: transacao.categoria, // mantém o nome visível da categoria
+          tipo: transacao.tipo,
+        };
       }
       return item;
     });
 
-    setReceitas(transacaoAtualizada);
+    setReceitas(listaAtualizada);
     setEdit(false);
     setModalView(false);
-    alert('Transação atualizada com sucesso!');
-  } catch (error) {
-    alert(error);
-  }
-};*/ 
 
-    setReceitas(transacaoAtualizada);
-    setEdit(false);
-    setModalView(false);
-    alert('Transação atualizada com sucesso!')
-  };
+    alert("✅ Transação atualizada com sucesso!");
+  } catch (error) {
+    console.error("Erro ao atualizar transação:", error);
+    alert("❌ Erro ao atualizar transação. Verifique os dados e tente novamente.");
+  }
+};
+
 
   const handleChange = (texto) => {
       // Remove tudo que não for número
