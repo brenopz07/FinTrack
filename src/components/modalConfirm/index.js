@@ -10,7 +10,7 @@ import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { excluirTransacao } from "../../services/transactionService";
 
-export default function ModalConfirm({modalConfirmView, setModalConfirmView, transacao, receitas, setReceitas, modalView, setModalView, deslogar, setDeslogar, setModalUserView}){
+export default function ModalConfirm({modalConfirmView, setModalConfirmView, transacao, receitas, setReceitas, modalView, setModalView, deslogar, setDeslogar, setModalUserView, dark}){
      
   const navigation = useNavigation();
     
@@ -26,9 +26,7 @@ const excluirReceita = async (id) => {
     alert(error); // mostra o erro se algo der errado
   }
 };
-
-  
-
+    
 
     return(
         <Modal
@@ -45,19 +43,19 @@ const excluirReceita = async (id) => {
             }}
             >
                 <Pressable onPress={() => {}}>
-                    <CardModalConfirm>
+                    <CardModalConfirm dark={dark}>
                         <View style={{alignItems:'center', gap:16}}>
                             <Image source={aviso} style={{width:66, height:60}}></Image>
                             <View style={{alignItems:'center', marginHorizontal:20}}>
-                                <SubTitulo>Tem certeza disso? </SubTitulo>
-                                <Texto style={{textAlign:'center'}}>{deslogar ? 'Ao sair, será necessário inserir novamente suas credenciais para acessar.' : 'Essa ação náo pode ser desfeita. Por favor, confirme se deseja prosseguir.'}</Texto>
+                                <SubTitulo dark={dark}>Tem certeza disso? </SubTitulo>
+                                <Texto dark={dark} style={{textAlign:'center'}}>{deslogar ? 'Ao sair, será necessário inserir novamente suas credenciais para acessar.' : 'Essa ação náo pode ser desfeita. Por favor, confirme se deseja prosseguir.'}</Texto>
                             </View>
                             <View style={{flexDirection:'row',gap:16, width:'100%'}}>
                                 <BotaoConfirmar onPress={() => {(deslogar) ? (navigation.navigate('Login'), setModalUserView(false)) : (excluirReceita(transacao.id), setModalConfirmView(false))}}>
                                     <Texto style={{alignSelf:'center',color:'#FFFFFF'}}>Confirmar</Texto>
                                 </BotaoConfirmar>
                                 <BotaoCancelar onPress={() => {setModalConfirmView(false)}}>
-                                    <Texto style={{alignSelf:'center', color:'#595959'}}>Cancelar</Texto>
+                                    <Texto dark={dark} style={{alignSelf:'center', color:'#595959'}}>Cancelar</Texto>
                                 </BotaoCancelar>
                             </View>
                         </View>
@@ -76,7 +74,7 @@ gap: 24px;
 angle: 0 deg;
 opacity: 1;
 border-radius: 24px;
-background: #FFFFFF;
+background-color: ${({ dark }) => (dark ? '#1E1E1E' : '#ffffff')};
 margin-horizontal:30;
 `
 

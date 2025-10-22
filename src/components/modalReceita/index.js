@@ -15,7 +15,7 @@ import { editarTransacao } from "../../services/transactionService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
-export default function ModalReceita({modalView, setModalView, transacao, receitas, setReceitas}){
+export default function ModalReceita({modalView, setModalView, transacao, receitas, setReceitas, dark}){
     const [modalConfirmView,setModalConfirmView] = useState(false);
     const [showCalendar, setShowCalendar] = useState(false)
     const [edit, setEdit] = useState(false)
@@ -132,7 +132,7 @@ const atualizar = async () => {
       >
         {/* Conteúdo — não fecha ao clicar */}
         <Pressable onPress={() => {}}>
-            <CardModal>
+            <CardModal dark={dark}>
                 <View style={{flexDirection:'row', alignItems:'center', justifyContent:'space-between'}}>
                     {edit ? (
                 <TextoInput
@@ -182,9 +182,9 @@ const atualizar = async () => {
                 </Categoria>
                     
                 </View>
-                <Linha/>
+                <Linha dark={dark}/>
                 <Container>
-                    <MiniTexto>Descrição</MiniTexto>
+                    <MiniTexto dark={dark}>Descrição</MiniTexto>
                     {edit ? (
                 <TextoInput
                   value={novaDescricao}
@@ -192,33 +192,34 @@ const atualizar = async () => {
                   
                   style={{
                     fontSize: 14,
-                    color: '#262626',
+                    color: !dark ? '#1E1E1E' : '#f0f2f5',
                   }}
                   autoFocus
                   onSubmitEditing={atualizar}
                   blurOnSubmit={true}
                   />
                 ) : (
-                    <Texto>{transacao.descricao}</Texto>)}
+                    <Texto dark={dark}>{transacao.descricao}</Texto>)}
 
                     <View style={{flexDirection:'row' ,justifyContent:'space-between', marginTop:10, width:'70%'}}>
                         <View>
-                            <MiniTexto>Data</MiniTexto>
+                            <MiniTexto dark={dark}>Data</MiniTexto>
                             {edit ? (
                                 <Pressable onPress={() => setShowCalendar(true)}>
                                 <TextoInput
                                     value={novaData}
-                                    style={{ marginRight: 10 }}
+                                    style={{ marginRight: 10, color: !dark ? '#1E1E1E' : '#f0f2f5', }}
                                     editable={false} // impede edição manual
+                                    
                                 />
                                 </Pressable>
                             ) : (
-                                <Texto>{transacao.data}</Texto>
+                                <Texto dark={dark}>{transacao.data}</Texto>
                             )}
                         </View>
 
                         <View style={{}}>
-                            <MiniTexto>Valor</MiniTexto>
+                            <MiniTexto dark={dark}>Valor</MiniTexto>
                             <View style={{flexDirection:'row'}}>
                                 <Texto style={{color: transacao.tipo === 'receita' ? '#34A853' : '#EA4335', alignSelf:'center', marginBottom:2}}>R$</Texto>
                             {edit ? (
@@ -242,16 +243,16 @@ const atualizar = async () => {
                     </View>
                 </Container>
                 <View style={{flexDirection:'row',gap:16, width:'100%'}}>
-                    <BotaoApagar onPress={() => {setModalConfirmView(true); console.log(receitas)}}>
+                    <BotaoApagar onPress={() => {setModalConfirmView(true); console.log(dark)}}>
                         <Image source={apagar} style={{width:12, height:13}}></Image>
                         <Texto style={{alignSelf:'center',color:'#EA4335'}}>Apagar</Texto>
                     </BotaoApagar>
-                    <BotaoEdit onPress={() => {setEdit(true); console.log(edit)}}>
+                    <BotaoEdit onPress={() => {setEdit(true); console.log(edit)}} >
                         <Image source={editar} style={{width:12, height:13}}></Image>
-                        <Texto style={{alignSelf:'center'}}>Editar</Texto>
+                        <Texto dark={dark}style={{alignSelf:'center'}}>Editar</Texto>
                     </BotaoEdit>
                 </View>
-                <ModalConfirm modalConfirmView={modalConfirmView} setModalConfirmView={setModalConfirmView} transacao={transacao} receitas={receitas} setReceitas={setReceitas} modalView={modalView} setModalView={setModalView}/>
+                <ModalConfirm modalConfirmView={modalConfirmView} setModalConfirmView={setModalConfirmView} transacao={transacao} receitas={receitas} setReceitas={setReceitas} modalView={modalView} setModalView={setModalView} dark={dark}/>
             </CardModal>
         </Pressable>
       </Pressable>
@@ -269,12 +270,12 @@ opacity: 1;
 padding: 30px;
 border-top-left-radius: 32px;
 border-top-right-radius: 32px;
-background: #FFFFFF;
+background-color: ${({ dark }) => (dark ? '#1E1E1E' : '#ffffff')};
 
 `
 export const Linha = styled.View`
 border: 30px;
-border-color:#F0F2F5;
+border-color:${({ dark }) => (dark ? '#242222ff' : '#f0f2f5')};
 width: 100%;
 height: 0px;
 angle: 0 deg;
@@ -314,7 +315,7 @@ border-radius: 12px;
 border-width: 2px;
 padding: 10px;
 border: 2px; 
-border-color: #F0F2F5;
+border-color: ${({ dark }) => (dark ? 'black' : '#f0f2f5')};
 shadow-color: #000000;
 shadow-offset: 0px 4px;
 shadow-opacity: 0.25;

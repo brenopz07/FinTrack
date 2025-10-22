@@ -24,33 +24,39 @@ export const Background = styled(LinearGradient).attrs({
 `;
 
 export const Titulo = styled.Text`
-  color: #262626;
+  color: ${({ dark }) => (dark ? '#f0f2f5' : '#1E1E1E')};
   font-family: 'Poppins_Bold';
   font-size: 30px;
 `;
 
 export const SubTitulo = styled.Text`
-  color: #262626;
+  color: ${({ dark }) => (dark ? '#f0f2f5' : '#1E1E1E')};
   font-family: 'Poppins_SemiBold';
   font-size: 20px;
 `;
 
 export const Texto = styled.Text`
-  color: #262626;
+  color: ${({ dark }) => (dark ? '#f0f2f5' : '#1E1E1E')};
   font-family: 'Poppins_Regular';
   font-size: 14px;
 `;
 
 export const MiniTexto = styled.Text`
-  color: #262626;
+  color: ${({ dark }) => (dark ? '#f0f2f5' : '#1E1E1E')};
   font-family: 'Poppins_Light';
   font-size: 12px;
 `;
 
+export const TextoInput = styled.TextInput`
+  color: ${({ dark }) => (dark ? '#f0f2f5' : '#1E1E1E')};
+  font-family: 'Poppins_Regular';
+  font-size: 14px;
+  height: 42px;
+  margin-left:-4px;
+`;
+
 export const Container = styled.View`
-width: 390;
-height: 601;
-angle: 0 deg;
+
 opacity: 1;
 gap: 31px;
 top: 243px;
@@ -93,7 +99,7 @@ export const BotaoGradientBackground = styled(LinearGradient).attrs({
 `;
 
 export const ButtonText = styled.Text`
-  color: white;
+  color: '#f0f2f5';
   font-family: 'Poppins_SemiBold';
   font-size: 20px;
 `;
@@ -107,13 +113,7 @@ opacity: 1;
 border-width: 2px;
 border-radius: 12px;
 padding: 10px;
-border: 2px #F0F2F5;
+border: 2px;
+border-color: ${({ dark }) => (dark ? 'black' : '#f0f2f5')};
 `
 
-export const TextoInput = styled.TextInput`
-color: #262626;
-font-family: 'Poppins_Regular';
-font-size: 14px;
-height: 42;
-margin-left:-4;
-`

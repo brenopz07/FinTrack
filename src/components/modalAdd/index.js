@@ -26,6 +26,7 @@ export default function ModalAdiciona({
   receita,
   receitas,
   setReceitas,
+  dark
 }) {
   const hoje = new Date();
   const dataFormatada = `${hoje.getDate().toString().padStart(2, "0")}/${(
@@ -118,7 +119,7 @@ export default function ModalAdiciona({
   };
 
   return (
-    <Modal
+    <Modal dark={dark}
       visible={modalAddView}
       transparent
       animationType="fade"
@@ -133,49 +134,55 @@ export default function ModalAdiciona({
         }}
       >
         <Pressable onPress={() => {}}>
-          <CardModal>
+          <CardModal dark={dark}>
             <View style={{ flexDirection: "row" }}>
-              <SubTitulo>Adicione uma nova </SubTitulo>
+              <SubTitulo dark={dark}>Adicione uma nova </SubTitulo>
               <SubTitulo style={{ color: receita ? "#34A853" : "red" }}>
                 {receita ? "receita" : "despesa"}
               </SubTitulo>
             </View>
-            <Linha />
+            <Linha dark={dark} />
 
-            <LabelInput>
-              <MiniTexto style={{ marginBottom: -12 }}>Título</MiniTexto>
+            <LabelInput dark={dark}>
+              <MiniTexto dark={dark} style={{ marginBottom: -12 }}>Título</MiniTexto>
               <TextoInput
                 placeholder="Digite aqui"
                 value={titulo}
                 onChangeText={setTitulo}
+                placeholderTextColor={(!dark ? '#1E1E1E' : '#f0f2f5')}
+                style={{color:!dark ? '#1E1E1E' : '#f0f2f5'}}
               />
             </LabelInput>
 
-            <LabelInput>
-              <MiniTexto style={{ marginBottom: -12 }}>Descrição</MiniTexto>
+            <LabelInput dark={dark}>
+              <MiniTexto dark={dark} style={{ marginBottom: -12 }}>Descrição</MiniTexto>
               <TextoInput
                 placeholder="Digite aqui"
                 value={descricao}
                 onChangeText={setDescricao}
+                placeholderTextColor={(!dark ? '#1E1E1E' : '#f0f2f5')}
+                style={{color:!dark ? '#1E1E1E' : '#f0f2f5'}}
               />
             </LabelInput>
 
             <View style={{ width: "100%", flexDirection: "row", gap: 10 }}>
-              <LabelInput style={{ flex: 1 }}>
-                <MiniTexto style={{ marginBottom: -12 }}>Valor</MiniTexto>
+              <LabelInput dark={dark} style={{ flex: 1 }}>
+                <MiniTexto dark={dark} style={{ marginBottom: -12 }}>Valor</MiniTexto>
                 <TextoInput
                   placeholder="R$ 0,00"
                   value={valor}
                   onChangeText={handleChange}
+                  placeholderTextColor={(!dark ? '#1E1E1E' : '#f0f2f5')}
+                  style={{color:!dark ? '#1E1E1E' : '#f0f2f5'}}
                 />
               </LabelInput>
 
-              <LabelInput style={{ flex: 1 }}>
-                <MiniTexto style={{ marginBottom: -12 }}>Data</MiniTexto>
+              <LabelInput dark={dark} style={{ flex: 1 }}>
+                <MiniTexto dark={dark} style={{ marginBottom: -12 }}>Data</MiniTexto>
 
                 {/* Campo que abre o calendário */}
                 <TouchableOpacity onPress={() => setShowCalendar(true)}>
-                  <TextoInput
+                  <TextoInput dark={dark}
                     placeholder="Selecionar data"
                     value={data}
                     editable={false}
@@ -185,32 +192,32 @@ export default function ModalAdiciona({
               </LabelInput>
             </View>
 
-            <LabelInput>
-              <MiniTexto style={{ marginBottom: 0 }}>Categoria</MiniTexto>
+            <LabelInput dark={dark} style={{height:'auto'}}>
+              <MiniTexto dark={dark} style={{ marginBottom: 0 }}>Categoria</MiniTexto>
               <Picker
                 selectedValue={categoriaSelecionada}
                 onValueChange={(itemValue) =>
-                  setCategoriaSelecionada(itemValue)
+                setCategoriaSelecionada(itemValue)
                 }
                 style={{
-                  backgroundColor: "#fff",
+                  backgroundColor: (dark ? '#1E1E1E' : '#f0f2f5'),
                   borderRadius: 8,
-                  height: "30px",
+                  height: "10px",
                 }}
               >
-                <Picker.Item label="Selecione uma categoria" value="" />
+                <Picker.Item  style={{color:(!dark ? '#1E1E1E' : '#f0f2f5'), backgroundColor:(dark ? '#1E1E1E' : '#f0f2f5')}} label="Selecione uma categoria" value="" />
                 {categorias.map((cat) => (
-                  <Picker.Item key={cat.id} label={cat.name} value={cat.id} />
+                  <Picker.Item key={cat.id} label={cat.name} value={cat.id} style={{color:(!dark ? '#1E1E1E' : '#f0f2f5'), backgroundColor:(dark ? '#1E1E1E' : '#f0f2f5')}} />
                 ))}
               </Picker>
             </LabelInput>
 
             <View style={{ flexDirection: "row", gap: 16, width: "100%" }}>
-              <BotaoCancelar
-                style={{ flex: 1, borderColor: "#F0F2F5" }}
+              <BotaoCancelar dark={dark}
+                style={{ flex: 1, borderColor:(dark ? 'black' : '#f0f2f5') }}
                 onPress={() => setModalAddView(false)}
               >
-                <Texto style={{ alignSelf: "center" }}>Cancelar</Texto>
+                <Texto dark={dark} style={{ alignSelf: "center" }}>Cancelar</Texto>
               </BotaoCancelar>
 
               <BotaoGradientBackground style={{ flex: 1.5 }}>

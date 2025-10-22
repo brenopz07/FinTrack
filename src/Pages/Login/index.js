@@ -12,10 +12,11 @@ import checkboxFalse from '../../assets/Subtract.png'
 import error from '../../assets/Error icon.png'
 import visualizar from '../../assets/olho.png'
 import { loginUsuario } from '../../services/userService';
-import { useNavigation } from '@react-navigation/native';
+import { DarkTheme, useNavigation } from '@react-navigation/native';
 
 import AuthRoutes from '../../Routes/auth.routes';
 import AppRoutes from '../../Routes';
+import { useTheme } from '../../contexts/ThemeContext';
 
 export default function Login(){
 
@@ -30,6 +31,8 @@ const [mensagem, setMensagem] = useState('');
 const[visualizarSenha, setVisualizarSenha] = useState(true);
 
 const [conectado, setConectado] = useState(false);
+
+const dark = useTheme();
 
 
 const mostrarSenha = () => {
@@ -114,43 +117,47 @@ const handleSelect = () => {
         </ContainerLogo>
             
 
-            <BackCard style={{alignSelf:'center'}}>    
+            <BackCard dark={dark} style={{alignSelf:'center'}}>    
             </BackCard>
-            <Card>
+            <Card dark={dark}>
                 <View style={{alignItems:'center'}}>
                     
                     <View style={{alignItems:'center', gap:5, paddingTop:50}}>
-                        <SubTitulo style={{textAlign:'center'}}>
+                        <SubTitulo dark={dark} style={{textAlign:'center'}}>
                             Seja bem vindo de volta!
                         </SubTitulo>
-                        <MiniTexto>
+                        <MiniTexto dark={dark}>
                             Preencha as informações
                         </MiniTexto>
                     </View>
 
                     <View style={{paddingTop:32, gap:16}}>
-                        <LabelInput>
-                            <MiniTexto style={{marginBottom:-12}}>
+                        <LabelInput dark={dark}>
+                            <MiniTexto dark={dark} style={{marginBottom:-12}}>
                                 Email
                             </MiniTexto>
                             <TextoInput 
                                 placeholder='Digite aqui'
                                 value={email}
                                 onChangeText={setEmail}
+                                placeholderTextColor={!dark ? '#1E1E1E' : '#ffffff'}
+                                style={{color:!dark ? '#1E1E1E' : '#f0f2f5'}}
                                 >
                             </TextoInput>
                         </LabelInput>
 
-                        <LabelInput>
-                            <MiniTexto style={{marginBottom:-12}}>
+                        <LabelInput dark={dark}>
+                            <MiniTexto dark={dark} style={{marginBottom:-12}}>
                                 Senha
                             </MiniTexto>
                             <View style={{flexDirection:'row'}}>
-                                <TextoInput 
+                                <TextoInput dark={dark}
                                     placeholder='Digite aqui'
                                     value={senha}
                                     onChangeText={setSenha}
                                     secureTextEntry={visualizarSenha}
+                                    placeholderTextColor={!dark ? '#1E1E1E' : '#ffffff'}
+                                    style={{color:!dark ? '#1E1E1E' : '#f0f2f5'}}
                                     >
                                 </TextoInput>
                                 <TouchableOpacity style={{position: 'absolute',right: 10}} onPressIn={mostrarSenha} onPressOut={naoMostrarSenha}>
@@ -173,13 +180,13 @@ const handleSelect = () => {
                             </View>
                         )}
 
-                        <MiniTexto style={{alignSelf:'flex-end'}}>
+                        <MiniTexto dark={dark} style={{alignSelf:'flex-end'}}>
                             Esqueceu a senha?
                         </MiniTexto>
 
                         <BotaoGradientBackground>
                             <ButtonTouchable>
-                                <ButtonText onPress={() => {handleLogin(), console.log(conectado)}}>
+                                <ButtonText style={{color: 'white'}} onPress={() => {handleLogin(), console.log(conectado)}}>
                                     Confirmar
                                 </ButtonText>
                             </ButtonTouchable>
@@ -189,7 +196,7 @@ const handleSelect = () => {
                             <TouchableOpacity onPress={handleSelect}>
                                 <Image source={!selecionado ? checkboxTrue : checkboxFalse} style={{width:12, height:12, resizeMode:'contain', marginBottom:1.8, marginLeft:3 }}></Image>
                             </TouchableOpacity>
-                            <MiniTexto>
+                            <MiniTexto dark={dark}>
                                 Continuar conectado
                             </MiniTexto>
                         </View>
@@ -232,7 +239,7 @@ padding-bottom: 20px;
 padding-left: 30px;
 position: absolute;
 bottom: 0;
-background: #FFFFFF;
+ background-color: ${({ dark }) => (dark ? '#1E1E1E' : '#ffffff')};
 
 `
 const BackCard = styled.View`
@@ -244,7 +251,7 @@ border-top-left-radius: 32px;
 border-top-right-radius: 32px;
 position:absolute;
 bottom: 13;
-background: #F0F2F580;
+ background-color: ${({ dark }) => (dark ? '#2C2C2CB2' : '#F0F2F580')};
 zIndex:0;
 `
 const BotaoCadastrar = styled.TouchableOpacity`

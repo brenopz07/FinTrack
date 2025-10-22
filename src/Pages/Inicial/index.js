@@ -6,14 +6,18 @@ import logo from '../../assets/Logo.png'
 import image2 from '../../assets/image 2.png'
 
 import { useNavigation } from '@react-navigation/native';
+import { useTheme } from '../../contexts/ThemeContext';
+
 
 
 
 export default function Inicial(){
+    const dark = useTheme()
+
     const navigation = useNavigation();
     
     return( 
-    <Background>
+    <Background >
         <ContainerLogo style={{flexDirection:'row', width:249, height:86}}> 
             <Image source={logo} style={{width:80, height:80,resizeMode:'contain'}}></Image>
             
@@ -30,22 +34,22 @@ export default function Inicial(){
         </ContainerLogo>
             
 
-            <BackCard style={{backgroundColor:'#F0F2F580', alignSelf:'center'}} >    
+            <BackCard  dark={dark} style={{ alignSelf:'center'}} >    
             </BackCard>
-            <Card style={{backgroundColor:'#FFFFFF'}}>
+            <Card dark={dark}>
                 <View style={{alignItems:'center'}}>
                     <Image source={image2} style={{width:250, height:250}}></Image>
                     <View style={{alignItems:'center', gap:5}}>
-                        <MiniTexto>
+                        <MiniTexto dark={dark}>
                             Pronto para comecar?
                         </MiniTexto>
-                        <SubTitulo style={{textAlign:'center'}}>
+                        <SubTitulo dark={dark} style={{textAlign:'center'}}>
                             Tenha o controle total do seu dinheiro, sem complicações.
                         </SubTitulo>
                     </View>
                         <BotaoGradientBackground style={{marginTop:31}}>
                             <ButtonTouchable onPress={ () => navigation.navigate('Login') }>
-                                <ButtonText>
+                                <ButtonText style={{color:'white'}}>
                                     Comece agora
                                 </ButtonText>
                             </ButtonTouchable>
@@ -88,6 +92,7 @@ padding-bottom: 20px;
 padding-left: 30px;
 position: absolute;
 bottom: 0;
+background-color: ${({ dark }) => (dark ? '#1E1E1E' : '#ffffff')};
 `
 const BackCard = styled.View`
 width: 320;
@@ -101,4 +106,5 @@ marginBottom:30px;
 position:absolute;
 bottom:0;
 zIndex:0;
+ background-color: ${({ dark }) => (dark ? '#2C2C2CB2' : '#F0F2F580')};
 `

@@ -4,6 +4,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import { useFonts,Poppins_400Regular, Poppins_700Bold, Poppins_300Light, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
 import Routes from './src/Routes/index';
 import { View } from 'react-native';
+import { ThemeProvider } from './src/contexts/ThemeContext';
 
 
 
@@ -20,8 +21,10 @@ export default function App() {
     return <View />; // Ou um componente de loading real
   }
   return (
-    <NavigationContainer>
-        <Routes />
-    </NavigationContainer>
+    <ThemeProvider>
+      <NavigationContainer>
+          <Routes />
+      </NavigationContainer>
+    </ThemeProvider>
   );
 }

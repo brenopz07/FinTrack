@@ -22,6 +22,7 @@ import olho from "../../assets/olho.png";
 import { useNavigation } from "@react-navigation/native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useTheme } from "../../contexts/ThemeContext";
 
 export default function Cadastro() {
   const navigation = useNavigation();
@@ -35,6 +36,8 @@ export default function Cadastro() {
   const [visualizarConfirmaSenha, setVisualizarConfirmaSenha] = useState(true);
 
   const [mensagem, setMensagem] = useState("");
+
+  const dark = useTheme();
 
   const mostrarSenha = () => {
     setVisualizarSenha(false);
@@ -91,7 +94,7 @@ export default function Cadastro() {
           <Image source={vector} style={{ width: 8, height: 16 }}></Image>
         </TouchableOpacity>
         <View style={{ gap: 8, flexDirection: "row" }}>
-          <MiniTexto
+          <MiniTexto 
             style={{ color: "#F0F2F5", alignSelf: "center", marginTop: 4 }}
           >
             {" "}
@@ -108,6 +111,7 @@ export default function Cadastro() {
           width: 249,
           height: 86,
           justifyContent: "center",
+          marginTop:-15,
         }}
       >
         <Image
@@ -119,7 +123,8 @@ export default function Cadastro() {
           style={{
             flexDirection: "column",
             justifyContent: "center",
-            gap: -50,
+            gap: -80,
+          
           }}
         >
           <TextoLogo style={{ color: "#FFFFFF" }}>Fin</TextoLogo>
@@ -130,58 +135,66 @@ export default function Cadastro() {
         </View>
       </ContainerLogo>
 
-      <BackCard style={{ alignSelf: "center" }}></BackCard>
-      <Card>
+      <BackCard dark={dark} style={{ alignSelf: "center" }}></BackCard>
+      <Card dark={dark}>
         <View style={{ alignItems: "center" }}>
           <View style={{ alignItems: "center", gap: 5, paddingTop: 50 }}>
-            <SubTitulo style={{ textAlign: "center" }}>
+            <SubTitulo dark={dark} style={{ textAlign: "center" }}>
               Seja bem vindo!
             </SubTitulo>
-            <MiniTexto>
+            <MiniTexto dark={dark}>
               Se junte a nós e tenha controle do seu dinheiro.
             </MiniTexto>
           </View>
 
           <View style={{ paddingTop: 32, gap: 16 }}>
-            <LabelInput>
-              <MiniTexto style={{ marginBottom: -12 }}>Email</MiniTexto>
+            <LabelInput dark={dark}>
+              <MiniTexto dark={dark} style={{ marginBottom: -12 }}>Email</MiniTexto>
               <TextoInput
                 placeholder="Digite aqui"
                 value={email}
                 onChangeText={setEmail}
+                placeholderTextColor={!dark ? '#1E1E1E' : '#ffffff'}
+                style={{color:!dark ? '#1E1E1E' : '#f0f2f5'}}
               ></TextoInput>
             </LabelInput>
 
-            <LabelInput>
-              <MiniTexto style={{ marginBottom: -12 }}>Nome</MiniTexto>
+            <LabelInput dark={dark}>
+              <MiniTexto dark={dark} style={{ marginBottom: -12 }}>Nome</MiniTexto>
               <TextoInput
                 placeholder="Digite aqui"
                 value={nome}
                 onChangeText={setNome}
+                placeholderTextColor={!dark ? '#1E1E1E' : '#ffffff'}
+                style={{color:!dark ? '#1E1E1E' : '#f0f2f5'}}
               ></TextoInput>
             </LabelInput>
 
-            <LabelInput>
-              <MiniTexto style={{ marginBottom: -12 }}>Senha</MiniTexto>
+            <LabelInput dark={dark}>
+              <MiniTexto dark={dark} style={{ marginBottom: -12 }}>Senha</MiniTexto>
               <View style={{ flexDirection: "row" }}>
                 <TextoInput
                   placeholder="Digite aqui"
                   value={senha}
                   onChangeText={setSenha}
                   secureTextEntry={visualizarSenha}
+                  placeholderTextColor={!dark ? '#1E1E1E' : '#ffffff'}
+                  style={{color:!dark ? '#1E1E1E' : '#f0f2f5'}}
                 ></TextoInput>
                 <TouchableOpacity
                   style={{ position: "absolute", right: 10 }}
                   onPressIn={mostrarSenha}
                   onPressOut={naoMostrarSenha}
+                  placeholderTextColor={!dark ? '#1E1E1E' : '#ffffff'}
+                  
                 >
                   <Image source={olho} style={{ marginTop: 0 }}></Image>
                 </TouchableOpacity>
               </View>
             </LabelInput>
 
-            <LabelInput>
-              <MiniTexto style={{ marginBottom: -12 }}>
+            <LabelInput dark={dark}>
+              <MiniTexto dark={dark} style={{ marginBottom: -12 }}>
                 Confirme a senha
               </MiniTexto>
               <View style={{ flexDirection: "row" }}>
@@ -190,6 +203,8 @@ export default function Cadastro() {
                   value={confirmaSenha}
                   onChangeText={setConfirmaSenha}
                   secureTextEntry={visualizarConfirmaSenha}
+                  placeholderTextColor={!dark ? '#1E1E1E' : '#ffffff'}
+                  style={{color:!dark ? '#1E1E1E' : '#f0f2f5'}}
                 ></TextoInput>
                 <TouchableOpacity
                   style={{ position: "absolute", right: 10 }}
@@ -226,7 +241,7 @@ export default function Cadastro() {
 
             <BotaoGradientBackground>
               <ButtonTouchable onPress={handleCadastro}>
-                <ButtonText>Cadastrar</ButtonText>
+                <ButtonText style={{color:'white'}}>Cadastrar</ButtonText>
               </ButtonTouchable>
             </BotaoGradientBackground>
           </View>
@@ -264,7 +279,7 @@ const Card = styled.View`
   padding-left: 30px;
   position: absolute;
   bottom: 0;
-  background: #ffffff;
+ background-color: ${({ dark }) => (dark ? '#1E1E1E' : '#ffffff')};
 `;
 const BackCard = styled.View`
   width: 320;
@@ -275,8 +290,8 @@ const BackCard = styled.View`
   border-top-right-radius: 32px;
   position: absolute;
   bottom: 13;
-  background: #f0f2f580;
   zindex: 0;
+   background-color: ${({ dark }) => (dark ? '#2C2C2CB2' : '#F0F2F580')};
 `;
 const BotaoLogin = styled.TouchableOpacity`
   width: 49;

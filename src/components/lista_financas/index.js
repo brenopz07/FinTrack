@@ -6,18 +6,18 @@ import styled from 'styled-components/native';
 import { FlatList, Image, ScrollView, View } from 'react-native';
 
 
-const ListaTransacoes = ({ data, onTransacaoPress }) => {
+const ListaTransacoes = ({ data, onTransacaoPress, dark }) => {
     const renderTransacaoItem = ({ item }) => (
         <CardLista
         onPress={() => onTransacaoPress(item)} 
         >
             <View style={{justifyContent:'center'}}>
                 {/* O numberOfLines é a solução para truncar texto com '...' */}
-                <Texto numberOfLines={1}>{item.titulo}</Texto> 
+                <Texto  dark={dark} numberOfLines={1}>{item.titulo}</Texto> 
                 <MiniTexto>{item.data}</MiniTexto>
             </View>
             <View style={{flexDirection:'row', gap: 8}}>
-                <Texto tipo={item.tipo}>
+                <Texto dark={dark} tipo={item.tipo}>
                     R$ {item.valor}
                 </Texto>
                 <Categoria style={{backgroundColor:(item.tipo === 'despesa') ? '#EA43354D' : '#34A85326'}}>

@@ -11,14 +11,14 @@ import ModalConfirm from "../modalConfirm";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
-export default function ModalUser({ modalUserView, setModalUserView, nome, setNome}) {
+export default function ModalUser({ modalUserView, setModalUserView, nome, setNome, dark, alternarTema }) {
 
   const [modalConfirmView,setModalConfirmView] = useState(false);
-  const [selecionado, setSelecionado] = useState(true);
   const [deslogar, setDeslogar] = useState(false);
   const [editNome, setEditNome] = useState(false);
   const [novoNome, setNovoNome] = useState(nome);
   const [email, setEmail] = useState('');
+
 
 const atualizarNome = async () => {
   try {
@@ -61,11 +61,6 @@ const atualizarNome = async () => {
     carregarEmail();
   }, []);
 
-  const alternarTema = () => {
-    setSelecionado(!selecionado);
-  };
-
-
   return (
     <Modal
       visible={modalUserView}
@@ -82,12 +77,12 @@ const atualizarNome = async () => {
         }}
       >
         <Pressable onPress={() => {}}>
-          <CardModalUser>
+          <CardModalUser dark={dark}>
             <Container style={{alignItems:'center'}}>
               <Texto style={{ color: '#595959' }}>Nome</Texto>
               <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems:'center', width:'50%', height:'auto', gap:8 }}>
                 {editNome ? (
-                    <TextInput
+                    <TextInput dark={dark}
                         value={novoNome}
                         onChangeText={setNovoNome}
                         style={{
@@ -107,7 +102,7 @@ const atualizarNome = async () => {
                       style={{}}
                       onPress={() => setEditNome(true)}
                     >
-                      <Texto style={{ color: '#262626'}}>
+                      <Texto dark={dark}>
                         {nome || 'Sem nome'}
                       </Texto>
                     </TouchableOpacity>
@@ -122,7 +117,7 @@ const atualizarNome = async () => {
             <Container>
               <Texto style={{ color: '#595959' }}>Email</Texto>
               <View style={{ flexDirection: 'row', gap: 8, justifyContent: 'center' }}>
-                <Texto>{email}</Texto>
+                <Texto dark={dark}>{email}</Texto>
               </View>
             </Container>
 
@@ -132,7 +127,7 @@ const atualizarNome = async () => {
               <Texto style={{ color: '#595959' }}>Tema</Texto>
 
               {/* 🔹 Botão do tema */}
-              <Pressable onPress={alternarTema}>
+              <Pressable onPress = {() => {alternarTema(); console.log(dark);}}>
                 <View
                   style={{
                     width: 54,
@@ -149,7 +144,7 @@ const atualizarNome = async () => {
                       width: '100%',
                       height: '100%',
                       borderRadius: 12,
-                      tintColor: (selecionado) ? null : '#1E1E1E',
+                      tintColor: (!dark) ? null : 'black',
                       resizeMode:'contain',
                     }}
                   />
@@ -163,7 +158,7 @@ const atualizarNome = async () => {
                       width: 12,
                       height: 12,
                       zIndex: 1,
-                      tintColor: (selecionado) ? 'black' : 'white',
+                      tintColor: (!dark) ? 'black' : 'white',
                     }}
                   />
 
@@ -176,7 +171,7 @@ const atualizarNome = async () => {
                       width: 15,
                       height: 15,
                       zIndex: 1,
-                      tintColor: (selecionado) ? 'white' : 'black',
+                      tintColor: (!dark) ? 'white' : 'black',
                     }}
                   />
 
@@ -185,7 +180,7 @@ const atualizarNome = async () => {
                     source={botao}
                     style={{
                       position: 'absolute',
-                      left: selecionado ? 1.5 : 25,
+                      left: !dark ? 1.5 : 25,
                       width: 25,
                       height: 25,
                       zIndex: 0,
@@ -203,7 +198,7 @@ const atualizarNome = async () => {
                 </BotaoSair>
             </View>
 
-            <ModalConfirm modalConfirmView={modalConfirmView} setModalConfirmView={setModalConfirmView} deslogar={deslogar} setDeslogar={setDeslogar} modalUserView={modalUserView} setModalUserView={setModalUserView}/>
+            <ModalConfirm modalConfirmView={modalConfirmView} setModalConfirmView={setModalConfirmView} deslogar={deslogar} setDeslogar={setDeslogar} modalUserView={modalUserView} setModalUserView={setModalUserView} dark={dark}/>
           </CardModalUser>
         </Pressable>
       </Pressable>
@@ -223,7 +218,7 @@ export const Container = styled.View`
 
 export const Linha = styled.View`
   border-bottom-width: 1px;
-  border-color: #F0F2F5;
+  border-color: black;
 `;
 
 const CardModalUser = styled.View`
@@ -232,10 +227,18 @@ const CardModalUser = styled.View`
   gap: 10px;
   padding: 20px;
   border-radius: 24px;
-  background-color: #f0f2f5;
+  background-color: ${({ dark }) => (dark ? '#1E1E1E' : '#ffffff')};
   margin-right: 25px;
   margin-top: 40px;
   align-self: flex-end;
+  width: 286;
+padding: 12px;
+angle: 0 deg;
+opacity: 1;
+border-top-left-radius: 12px;
+border-bottom-right-radius: 12px;
+border-bottom-left-radius: 12px;
+elevation:10;
 `;
 
 export const BotaoSair = styled.TouchableOpacity`

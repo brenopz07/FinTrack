@@ -19,7 +19,7 @@ export const meses = [
 ];
 
 
-export function MesesScroll({ mesSelecionado, handleMesSelecionado}) {
+export function MesesScroll({ mesSelecionado, handleMesSelecionado, dark}) {
     return (
         <ScrollView
             horizontal={true}
@@ -39,11 +39,12 @@ export function MesesScroll({ mesSelecionado, handleMesSelecionado}) {
                 return (
                     <React.Fragment key={index}>
                         {/* 1. Componente BotaoMes (novo nome) */}
-                        <BotaoMes
+                        <BotaoMes dark={dark}
                             onPress={() => handleMesSelecionado(mes)}
                             isSelected={isSelected}
+                            
                             >
-                            <Texto style={{ color: isSelected ? 'white' : 'black' }}>
+                            <Texto dark={dark} style={{ color: isSelected ? (dark ? 'white' : 'white')  : (dark ? 'white' : 'black') }}>
                                 {mes}
                             </Texto>
                         </BotaoMes>
@@ -67,9 +68,9 @@ const BotaoMes = styled.TouchableOpacity.attrs(props => ({
     align-items: center;
     justify-content: center;
     border-width: 1px;
-    border-color: ${props => (props.isSelected ? 'transparent' : '#F0F2F5')};
+    border-color: ${props => (props.isSelected ? 'transparent' : (props.dark ? 'black' : 'white'))};
 
-    background-color: ${props => (props.isSelected ? '#4285F4' : 'white')};
+    background-color: ${props => (props.isSelected ? '#4285F4' : (!props.dark ? '#f0f2f5' : 'black'))};
 
     elevation: ${props => (props.isSelected ? 4 : 0)};
     

@@ -20,6 +20,7 @@ import {
   MiniTexto,
   SubTitulo,
   Texto,
+  TextoInput,
   Titulo,
 } from "../../Styleguide/styles";
 import styled from "styled-components/native";
@@ -43,6 +44,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import ModalUser from "../../components/ModalUser";
 import { useRoute } from "@react-navigation/native";
 
+import { useTheme } from "../../contexts/ThemeContext";
+
 export default function Home() {
   const route = useRoute();
   const { nome, email } = route.params || {};
@@ -62,6 +65,10 @@ export default function Home() {
   const [transacaoSelecionada, setTransacaoSelecionada] = useState(null);
 
   const [modalUserView, setModalUserView] = useState(false);
+
+  const { dark , alternarTema } = useTheme()
+  
+
 
   const handleMesSelecionado = (mes) => {
     setMesSelecionado(mes);
@@ -193,7 +200,7 @@ useEffect(() => {
 }, [emailUsuario]);
 
   return (
-    <View style={{ backgroundColor: "#FFFFFF", flex: 1, marginBottom: 15 }}>
+    <View style={{ backgroundColor: dark ? '#1E1E1E' : '#FFFFFF', flex: 1, marginBottom: 15 }}>
       <View>
         <View
           style={{
@@ -337,20 +344,21 @@ useEffect(() => {
           </View>
         </Card>
 
-        <MesesScroll
+        <MesesScroll dark={dark}
           mesSelecionado={mesSelecionado}
           handleMesSelecionado={handleMesSelecionado}
           TextoComponent={Texto}
         />
 
         {receitas.length > 0 && (
-          <ContainerSearch>
-            <SearchBar>
+          <ContainerSearch dark={dark}>
+            <SearchBar dark={dark} style={{ borderColor:(dark ? 'black' : '#f0f2f5') }}>
               <Image source={lupa}></Image>
-              <TextInput
-                style={{ marginBottom: -3 }}
+              <TextoInput 
+                style={{ marginBottom: -4, color:'red', textAlign:'center' }}
                 placeholder="Pesquisa..."
-              ></TextInput>
+                placeholderTextColor={(dark ? '#f0f2f5' : '#1E1E1E')}
+              ></TextoInput>
             </SearchBar>
             <TouchableOpacity>
               <Image
@@ -376,7 +384,7 @@ useEffect(() => {
             marginHorizontal: 30,
           }}
         >
-          <MiniTexto style={{ color: "#595959" }}>Informações</MiniTexto>
+          <MiniTexto dark={dark}>Informações</MiniTexto>
           <View
             style={{
               flex: 1,
@@ -385,8 +393,8 @@ useEffect(() => {
               gap: 30,
             }}
           >
-            <MiniTexto style={{ color: "#595959" }}>Valor</MiniTexto>
-            <MiniTexto style={{ color: "#595959" }}>Categoria</MiniTexto>
+            <MiniTexto dark={dark}>Valor</MiniTexto>
+            <MiniTexto dark={dark}>Categoria</MiniTexto>
           </View>
         </View>
       )}
@@ -399,12 +407,12 @@ useEffect(() => {
         </View>
       )}
 
-      <ListaTransacoes
+      <ListaTransacoes dark={dark}
         data={mesDesejado === "" ? receitas : transacoesDoMes}
         onTransacaoPress={handleTransacaoPress}
       />
 
-      <ModalReceita
+      <ModalReceita 
         modalView={modalView}
         setModalView={setModalView}
         transacao={transacaoSelecionada}
@@ -412,6 +420,7 @@ useEffect(() => {
         setReceita={setReceita}
         receitas={receitas}
         setReceitas={setReceitas}
+        dark={dark}
       />
 
       <ModalAdiciona
@@ -421,6 +430,7 @@ useEffect(() => {
         receita={receita}
         receitas={receitas}
         setReceitas={setReceitas}
+        dark={dark}
       ></ModalAdiciona>
 
       <ModalUser
@@ -428,6 +438,8 @@ useEffect(() => {
         setModalUserView={setModalUserView}
         nome={nomeUsuario}
         setNome={setNomeUsuario}
+        dark={dark}
+        alternarTema={alternarTema}
       />
     </View>
   );
@@ -481,10 +493,10 @@ const SearchBar = styled.View`
   flex-direction: row;
   align-items: center;
   height: 37px;
-  background-color: white;
+  color: ${({ dark }) => (dark ? 'white' : '#1E1E1E')};
   border-radius: 999px;
   border-width: 2px;
-  border-color: #f0f2f5;
+  border-color: #F0F2F5;
   padding-left: 12;
   gap: 12;
   width: 78%;
