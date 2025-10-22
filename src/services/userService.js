@@ -9,7 +9,7 @@ export async function cadastrarUsuario({ name, email, password }) {
     });
     return response.data;
   } catch (error) {
-    console.error("Erro ao cadastrar usuário:", error.response?.data || error);
+    console.error("Erro ao cadastrar usuário:", error.response?.data.error || error);
     throw error;
   }
 }
@@ -18,6 +18,6 @@ export async function cadastrarUsuario({ name, email, password }) {
       const response = await api.post("/auth", { email, password });
       return response.data;
     } catch (error) {
-      throw error.response?.data?.message || "Erro ao fazer login.";
+      throw error.response?.data?.error || "Erro ao fazer login.";
     }
   }

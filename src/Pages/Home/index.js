@@ -62,6 +62,8 @@ export default function Home() {
   const [receita, setReceita] = useState(false);
   const [despesa, setDespesa] = useState(false);
 
+  const [atualizar, setAtualizar] = useState(true);
+
   const [transacaoSelecionada, setTransacaoSelecionada] = useState(null);
 
   const [modalUserView, setModalUserView] = useState(false);
@@ -172,8 +174,6 @@ export default function Home() {
   }, []);
 
 
-
-useEffect(() => {
   const carregarTransacoes = async () => {
     if (!emailUsuario) return;
 
@@ -195,9 +195,12 @@ useEffect(() => {
       console.log("Erro ao carregar transações:", erro);
     }
   };
-
-  carregarTransacoes();
-}, [emailUsuario]);
+  
+useEffect(() => {
+  if (atualizar) {
+    carregarTransacoes().then(() => setAtualizar(false));
+  }
+}, [atualizar]);
 
   return (
     <View style={{ backgroundColor: dark ? '#1E1E1E' : '#FFFFFF', flex: 1, marginBottom: 15 }}>
@@ -421,6 +424,7 @@ useEffect(() => {
         receitas={receitas}
         setReceitas={setReceitas}
         dark={dark}
+        atualizarTransacoes={() => setAtualizar(true)} //aqui
       />
 
       <ModalAdiciona
@@ -431,6 +435,7 @@ useEffect(() => {
         receitas={receitas}
         setReceitas={setReceitas}
         dark={dark}
+        atualizarTransacoes={() => setAtualizar(true)}
       ></ModalAdiciona>
 
       <ModalUser

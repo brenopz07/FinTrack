@@ -76,8 +76,8 @@ export async function editarTransacao(
 
     return response.data;
   } catch (error) {
-    console.error("Erro ao editar transação:", error.response?.data || error);
-    throw error.response?.data?.message || "Erro ao editar transação.";
+    console.error("Erro ao editar transação:", error.response?.data.error || error);
+    throw error.response?.data?.error || "Erro ao editar transação.";
   }
 }
 

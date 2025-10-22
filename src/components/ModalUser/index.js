@@ -1,60 +1,79 @@
-import { Image, Modal, Pressable, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  Modal,
+  Pressable,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import styled from "styled-components";
 import { ButtonTouchable, SubTitulo, Texto } from "../../Styleguide/styles";
-import edit from '../../assets/editar.png';
-import tema from '../../assets/tema.png';
-import claro from '../../assets/claro.png';
-import escuro from '../../assets/escuro.png';
-import botao from '../../assets/selecionado.png';
+import edit from "../../assets/editar.png";
+import tema from "../../assets/tema.png";
+import claro from "../../assets/claro.png";
+import escuro from "../../assets/escuro.png";
+import botao from "../../assets/selecionado.png";
 import { useEffect, useState } from "react";
 import ModalConfirm from "../modalConfirm";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import ModalCategory from "../modalCategory";
+export default function ModalUser({
+  modalUserView,
+  setModalUserView,
+  nome,
+  setNome,
+  dark,
+  alternarTema,
+}) {
+  const [modalConfirmView, setModalConfirmView] = useState(false);
+  const [modalCategoryView, setModalCategoryView] = useState(false);
 
-
-export default function ModalUser({ modalUserView, setModalUserView, nome, setNome, dark, alternarTema }) {
-
-  const [modalConfirmView,setModalConfirmView] = useState(false);
   const [deslogar, setDeslogar] = useState(false);
   const [editNome, setEditNome] = useState(false);
   const [novoNome, setNovoNome] = useState(nome);
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
 
+  const atualizarNome = async () => {
+    try {
+      setNome(novoNome);
+      const usuariosSalvos = await AsyncStorage.getItem("usuarios");
+      const usuarios = usuariosSalvos ? JSON.parse(usuariosSalvos) : [];
+      const usuarioLogado = await AsyncStorage.getItem("usuarioLogado");
+      const user = usuarioLogado ? JSON.parse(usuarioLogado) : null;
 
-const atualizarNome = async () => {
-  try {
-    setNome(novoNome);
-    const usuariosSalvos = await AsyncStorage.getItem('usuarios');
-    const usuarios = usuariosSalvos ? JSON.parse(usuariosSalvos) : [];
-    const usuarioLogado = await AsyncStorage.getItem('usuarioLogado');
-    const user = usuarioLogado ? JSON.parse(usuarioLogado) : null;
+      if (user) {
+        const usuariosAtualizados = usuarios.map((u) =>
+          u.email === user.email ? { ...u, nome: novoNome } : u
+        );
 
-    if (user) {
-      const usuariosAtualizados = usuarios.map(u =>
-        u.email === user.email ? { ...u, nome: novoNome } : u
-      );
+        await AsyncStorage.setItem(
+          "usuarios",
+          JSON.stringify(usuariosAtualizados)
+        );
+        await AsyncStorage.setItem(
+          "usuarioLogado",
+          JSON.stringify({ ...user, nome: novoNome })
+        );
+      }
 
-      await AsyncStorage.setItem('usuarios', JSON.stringify(usuariosAtualizados));
-      await AsyncStorage.setItem('usuarioLogado', JSON.stringify({ ...user, nome: novoNome}));
+      await AsyncStorage.setItem("@nomeUsuario", novoNome);
+      setEditNome(false);
+      console.log("Nome atualizado e salvo:", novoNome);
+    } catch (erro) {
+      console.log("Erro ao salvar nome:", erro);
     }
-
-    await AsyncStorage.setItem('@nomeUsuario', novoNome);
-    setEditNome(false);
-    console.log("Nome atualizado e salvo:", novoNome);
-  } catch (erro) {
-    console.log("Erro ao salvar nome:", erro);
-  }
-};
+  };
 
   useEffect(() => {
     const carregarEmail = async () => {
       try {
-        const usuarioLogado = await AsyncStorage.getItem('usuarioLogado');
+        const usuarioLogado = await AsyncStorage.getItem("usuarioLogado");
         if (usuarioLogado) {
           const user = JSON.parse(usuarioLogado);
           setEmail(user.email);
         }
       } catch (erro) {
-        console.log('Erro ao carregar email:', erro);
+        console.log("Erro ao carregar email:", erro);
       }
     };
 
@@ -69,83 +88,120 @@ const atualizarNome = async () => {
       onRequestClose={() => setModalUserView(false)}
     >
       <Pressable
-        onPress={() => {setModalUserView(false), setEditNome(false)}}
+        onPress={() => {
+          setModalUserView(false), setEditNome(false);
+        }}
         style={{
           flex: 1,
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          justifyContent: 'flex-start',
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          justifyContent: "flex-start",
         }}
       >
         <Pressable onPress={() => {}}>
           <CardModalUser dark={dark}>
-            <Container style={{alignItems:'center'}}>
-              <Texto style={{ color: '#595959' }}>Nome</Texto>
-              <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems:'center', width:'50%', height:'auto', gap:8 }}>
+            <Container style={{ alignItems: "center" }}>
+              <Texto style={{ color: "#595959" }}>Nome</Texto>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "flex-end",
+                  alignItems: "center",
+                  width: "50%",
+                  height: "auto",
+                  gap: 8,
+                }}
+              >
                 {editNome ? (
-                    <TextInput dark={dark}
-                        value={novoNome}
-                        onChangeText={setNovoNome}
-                        style={{
-                          flex: 1,
-                          fontSize: 14,
-                          color: '#262626',
-                          borderColor: '#C5C5C5',
-                          
-                        }}
-                        autoFocus
-                        onBlur={atualizarNome} // 🔹 salva quando o usuário sai do campo
-                        placeholder=""
-                        placeholderTextColor="#262626"
-                    />
-                    ) : (
-                    <TouchableOpacity
-                      style={{}}
-                      onPress={() => setEditNome(true)}
-                    >
-                      <Texto dark={dark}>
-                        {nome || 'Sem nome'}
-                      </Texto>
-                    </TouchableOpacity>
-                  )}
+                  <TextInput
+                    dark={dark}
+                    value={novoNome}
+                    onChangeText={setNovoNome}
+                    style={{
+                      flex: 1,
+                      fontSize: 14,
+                      color: "#262626",
+                      borderColor: "#C5C5C5",
+                    }}
+                    autoFocus
+                    onBlur={atualizarNome} // 🔹 salva quando o usuário sai do campo
+                    placeholder=""
+                    placeholderTextColor="#262626"
+                  />
+                ) : (
+                  <TouchableOpacity
+                    style={{}}
+                    onPress={() => setEditNome(true)}
+                  >
+                    <Texto dark={dark}>{nome || "Sem nome"}</Texto>
+                  </TouchableOpacity>
+                )}
 
-                <TouchableOpacity onPress={() => setEditNome(true)} style={{ paddingHorizontal: 4 }}>
+                <TouchableOpacity
+                  onPress={() => setEditNome(true)}
+                  style={{ paddingHorizontal: 4 }}
+                >
                   <Image source={edit} style={{ width: 18, height: 18 }} />
                 </TouchableOpacity>
               </View>
             </Container>
 
             <Container>
-              <Texto style={{ color: '#595959' }}>Email</Texto>
-              <View style={{ flexDirection: 'row', gap: 8, justifyContent: 'center' }}>
+              <Texto style={{ color: "#595959" }}>Email</Texto>
+              <View
+                style={{
+                  flexDirection: "row",
+                  gap: 8,
+                  justifyContent: "center",
+                }}
+              >
                 <Texto dark={dark}>{email}</Texto>
               </View>
             </Container>
+            <Container>
+              <Texto style={{ color: "#595959" }}>Categorias</Texto>
+              <TouchableOpacity onPress={() => setModalCategoryView(true)}>
+                <Texto dark={dark} style={{ color: "#007AFF" }}>
+                  Ver Categorias
+                </Texto>
+              </TouchableOpacity>
+            </Container>
+
+            <ModalCategory
+              modalCategoryView={modalCategoryView}
+              setModalCategoryView={setModalCategoryView}
+              dark={dark}
+            />
 
             <Linha />
 
-            <Container style={{ justifyContent: 'space-between' }}>
-              <Texto style={{ color: '#595959' }}>Tema</Texto>
+            <Container style={{ justifyContent: "space-between" }}>
+              <Texto style={{ color: "#595959" }}>Tema</Texto>
 
               {/* 🔹 Botão do tema */}
-              <Pressable onPress = {() => {alternarTema(); console.log(dark);}}>
+              <Pressable
+                onPress={() => {
+                  alternarTema();
+                  console.log(dark);
+                }}
+              >
                 <View
                   style={{
                     width: 54,
                     height: 27,
-                    position: 'relative',
-                    justifyContent: 'center',
-                    alignItems: 'center',
+                    position: "relative",
+                    justifyContent: "center",
+                    alignItems: "center",
                   }}
                 >
                   {/* Fundo do botão */}
                   <Image
                     source={tema}
                     style={{
-                      width: '100%',
-                      height: '100%',
+                      width: "100%",
+                      height: "100%",
                       borderRadius: 12,
-                      tintColor: (!dark) ? null : 'black',
-                      resizeMode:'contain',
+                      tintColor: !dark ? null : "black",
+                      resizeMode: "contain",
                     }}
                   />
 
@@ -153,12 +209,12 @@ const atualizarNome = async () => {
                   <Image
                     source={claro}
                     style={{
-                      position: 'absolute',
+                      position: "absolute",
                       left: 8,
                       width: 12,
                       height: 12,
                       zIndex: 1,
-                      tintColor: (!dark) ? 'black' : 'white',
+                      tintColor: !dark ? "black" : "white",
                     }}
                   />
 
@@ -166,12 +222,12 @@ const atualizarNome = async () => {
                   <Image
                     source={escuro}
                     style={{
-                      position: 'absolute',
+                      position: "absolute",
                       right: 8,
                       width: 15,
                       height: 15,
                       zIndex: 1,
-                      tintColor: (!dark) ? 'white' : 'black',
+                      tintColor: !dark ? "white" : "black",
                     }}
                   />
 
@@ -179,31 +235,43 @@ const atualizarNome = async () => {
                   <Image
                     source={botao}
                     style={{
-                      position: 'absolute',
+                      position: "absolute",
                       left: !dark ? 1.5 : 25,
                       width: 25,
                       height: 25,
                       zIndex: 0,
                       top: 4.5,
-                      
                     }}
                   />
                 </View>
               </Pressable>
             </Container>
 
-            <View style={{flexDirection:'row'}}>
-                <BotaoSair onPress={()=>{setModalConfirmView(true), setDeslogar(true)}}>
-                    <Texto style={{alignSelf:'center',color:'#FFFFFF'}}>Sair</Texto>
-                </BotaoSair>
+            <View style={{ flexDirection: "row" }}>
+              <BotaoSair
+                onPress={() => {
+                  setModalConfirmView(true), setDeslogar(true);
+                }}
+              >
+                <Texto style={{ alignSelf: "center", color: "#FFFFFF" }}>
+                  Sair
+                </Texto>
+              </BotaoSair>
             </View>
 
-            <ModalConfirm modalConfirmView={modalConfirmView} setModalConfirmView={setModalConfirmView} deslogar={deslogar} setDeslogar={setDeslogar} modalUserView={modalUserView} setModalUserView={setModalUserView} dark={dark}/>
+            <ModalConfirm
+              modalConfirmView={modalConfirmView}
+              setModalConfirmView={setModalConfirmView}
+              deslogar={deslogar}
+              setDeslogar={setDeslogar}
+              modalUserView={modalUserView}
+              setModalUserView={setModalUserView}
+              dark={dark}
+            />
           </CardModalUser>
         </Pressable>
       </Pressable>
     </Modal>
-    
   );
 }
 
@@ -227,31 +295,31 @@ const CardModalUser = styled.View`
   gap: 10px;
   padding: 20px;
   border-radius: 24px;
-  background-color: ${({ dark }) => (dark ? '#1E1E1E' : '#ffffff')};
+  background-color: ${({ dark }) => (dark ? "#1E1E1E" : "#ffffff")};
   margin-right: 25px;
   margin-top: 40px;
   align-self: flex-end;
   width: 286;
-padding: 12px;
-angle: 0 deg;
-opacity: 1;
-border-top-left-radius: 12px;
-border-bottom-right-radius: 12px;
-border-bottom-left-radius: 12px;
-elevation:10;
+  padding: 12px;
+  angle: 0 deg;
+  opacity: 1;
+  border-top-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  border-bottom-left-radius: 12px;
+  elevation: 10;
 `;
 
 export const BotaoSair = styled.TouchableOpacity`
-flex:1;
-height: auto;
-gap: 10px;
-angle: 0 deg;
-opacity: 1;
-border-radius: 8px;
-border-width: 1.5px;
-padding-top: 6px;
-padding-bottom: 6px;
-justify-content:center;
-background-color: #EA4335;
-border-color: #EA4335;
-`
+  flex: 1;
+  height: auto;
+  gap: 10px;
+  angle: 0 deg;
+  opacity: 1;
+  border-radius: 8px;
+  border-width: 1.5px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  justify-content: center;
+  background-color: #ea4335;
+  border-color: #ea4335;
+`;

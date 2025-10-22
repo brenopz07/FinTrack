@@ -26,7 +26,8 @@ export default function ModalAdiciona({
   receita,
   receitas,
   setReceitas,
-  dark
+  dark,
+  atualizarTransacoes
 }) {
   const hoje = new Date();
   const dataFormatada = `${hoje.getDate().toString().padStart(2, "0")}/${(
@@ -88,7 +89,7 @@ export default function ModalAdiciona({
       };
 
       await cadastrarTransacao(novaTransacao);
-
+      await atualizarTransacoes();
       alert(`${receita ? "Receita" : "Despesa"} cadastrada com sucesso!`);
       setModalAddView(false);
       limparInputs();
