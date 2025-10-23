@@ -21,3 +21,21 @@ export async function cadastrarUsuario({ name, email, password }) {
       throw error.response?.data?.error || "Erro ao fazer login.";
     }
   }
+
+  export async function editarNomeUsuario({ name, token }) {
+  try {
+    const response = await api.put(
+      "/users",
+      { name },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data; // retorna o usuário atualizado
+  } catch (error) {
+    console.error("Erro ao editar nome do usuário:", error.response?.data || error);
+    throw error;
+  }
+}

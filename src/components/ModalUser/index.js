@@ -17,6 +17,10 @@ import { useEffect, useState } from "react";
 import ModalConfirm from "../modalConfirm";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ModalCategory from "../modalCategory";
+import { editarNomeUsuario } from "../../services/UserServices";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+
 export default function ModalUser({
   modalUserView,
   setModalUserView,
@@ -33,36 +37,30 @@ export default function ModalUser({
   const [novoNome, setNovoNome] = useState(nome);
   const [email, setEmail] = useState("");
 
-  const atualizarNome = async () => {
-    try {
-      setNome(novoNome);
-      const usuariosSalvos = await AsyncStorage.getItem("usuarios");
-      const usuarios = usuariosSalvos ? JSON.parse(usuariosSalvos) : [];
-      const usuarioLogado = await AsyncStorage.getItem("usuarioLogado");
-      const user = usuarioLogado ? JSON.parse(usuarioLogado) : null;
 
-      if (user) {
-        const usuariosAtualizados = usuarios.map((u) =>
-          u.email === user.email ? { ...u, nome: novoNome } : u
-        );
+const atualizarNome = async () => {
+  try {
+    const token = await AsyncStorage.getItem("@token");
+    if (!token) throw new Error("Token não encontrado");
 
-        await AsyncStorage.setItem(
-          "usuarios",
-          JSON.stringify(usuariosAtualizados)
-        );
-        await AsyncStorage.setItem(
-          "usuarioLogado",
-          JSON.stringify({ ...user, nome: novoNome })
-        );
-      }
+    const response = await editarNomeUsuario({ name: novoNome, token });
 
-      await AsyncStorage.setItem("@nomeUsuario", novoNome);
-      setEditNome(false);
-      console.log("Nome atualizado e salvo:", novoNome);
-    } catch (erro) {
-      console.log("Erro ao salvar nome:", erro);
+    // Atualiza localmente
+    setNome(response.name);
+    setEditNome(false);
+
+    const usuarioLogado = await AsyncStorage.getItem("usuarioLogado");
+    if (usuarioLogado) {
+      const user = JSON.parse(usuarioLogado);
+      const userAtualizado = { ...user, nome: response.name };
+      await AsyncStorage.setItem("usuarioLogado", JSON.stringify(userAtualizado));
     }
-  };
+
+    console.log("✅ Nome atualizado com sucesso:", response.name);
+  } catch (error) {
+    console.error("❌ Erro ao atualizar nome:", error);
+  }
+};
 
   useEffect(() => {
     const carregarEmail = async () => {
