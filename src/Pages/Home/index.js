@@ -70,6 +70,10 @@ export default function Home() {
 
   const { dark , alternarTema } = useTheme()
   
+  const [transacoesFiltradas, setTransacoesFiltradas] = useState([]); 
+  const [pesquisa, setPesquisa] = useState(""); 
+
+  const [isFocused, setIsFocused] = useState(false);
 
 
   const handleMesSelecionado = (mes) => {
@@ -189,7 +193,7 @@ export default function Home() {
         categoria: t.category?.name || "",
         descricao: t.description || null,
       }));
-
+      setTransacoesFiltradas(transacoesMapeadas);
       setReceitas(transacoesMapeadas);
     } catch (erro) {
       console.log("Erro ao carregar transações:", erro);
@@ -201,6 +205,26 @@ useEffect(() => {
     carregarTransacoes().then(() => setAtualizar(false));
   }
 }, [atualizar]);
+
+useEffect(() => {
+  if (pesquisa.trim() === "") {
+    setTransacoesFiltradas(receitas);
+  } else {
+    const termo = pesquisa.toLowerCase();
+
+    const filtradas = receitas.filter((item) => {
+      const titulo = item.titulo?.toLowerCase() || "";
+      const categoria = item.categoria?.toLowerCase() || "";
+
+      return (
+        titulo.includes(termo) ||
+        categoria.includes(termo)
+      );
+    });
+
+    setTransacoesFiltradas(filtradas);
+  }
+}, [pesquisa, receitas]);
 
   return (
     <View style={{ backgroundColor: dark ? '#1E1E1E' : '#FFFFFF', flex: 1, marginBottom: 15 }}>
@@ -358,11 +382,16 @@ useEffect(() => {
             <SearchBar dark={dark} style={{ borderColor:(dark ? 'black' : '#f0f2f5') }}>
               <Image source={lupa}></Image>
               <TextoInput 
-                style={{ marginBottom: -4, color:'red', textAlign:'center' }}
-                placeholder="Pesquisa..."
+                style={{color:dark ? '#f0f2f5' : '#1E1E1E', textAlignVertical:'center', marginTop:5}}
+                placeholder={isFocused ? " " : "Pesquisa..."}
                 placeholderTextColor={(dark ? '#f0f2f5' : '#1E1E1E')}
+                onFocus={() => setIsFocused(true)}  // 👈 detecta foco
+                onBlur={() => setIsFocused(false)}
+                value={pesquisa}
+                onChangeText={setPesquisa}
               ></TextoInput>
             </SearchBar>
+            
             <TouchableOpacity>
               <Image
                 source={filtro}
@@ -411,7 +440,10 @@ useEffect(() => {
       )}
 
       <ListaTransacoes dark={dark}
-        data={mesDesejado === "" ? receitas : transacoesDoMes}
+        data={mesDesejado === ""
+            ? transacoesFiltradas // ← usa a lista filtrada
+            : transacoesFiltradas.filter((item) =>
+                item.data.split("/")[1].includes(mesDesejado))}
         onTransacaoPress={handleTransacaoPress}
       />
 

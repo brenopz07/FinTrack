@@ -17,8 +17,7 @@ import { useEffect, useState } from "react";
 import ModalConfirm from "../modalConfirm";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ModalCategory from "../modalCategory";
-import { editarNomeUsuario } from "../../services/UserServices";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { editarNomeUsuario } from "../../services/userService";
 
 
 export default function ModalUser({

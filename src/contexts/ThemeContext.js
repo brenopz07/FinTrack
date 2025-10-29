@@ -14,7 +14,7 @@ export function ThemeProvider({ children }) {
       try {
         const temaSalvo = await AsyncStorage.getItem("@tema");
         if (temaSalvo !== null) {
-          setClaro(temaSalvo === "dark");
+          setDark(temaSalvo === "dark");
         }
       } catch (erro) {
         console.log("Erro ao carregar tema:", erro);
