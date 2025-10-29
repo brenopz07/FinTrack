@@ -39,10 +39,8 @@ export default function ModalUser({
 
 const atualizarNome = async () => {
   try {
-    const token = await AsyncStorage.getItem("@token");
-    if (!token) throw new Error("Token não encontrado");
 
-    const response = await editarNomeUsuario({ name: novoNome, token });
+    const response = await editarNomeUsuario({ name: novoNome });
 
     // Atualiza localmente
     setNome(response.name);
@@ -116,7 +114,7 @@ const atualizarNome = async () => {
                     style={{
                       flex: 1,
                       fontSize: 14,
-                      color: "#262626",
+                      color:dark ? '#f0f2f5' : '#1E1E1E',
                       borderColor: "#C5C5C5",
                     }}
                     autoFocus

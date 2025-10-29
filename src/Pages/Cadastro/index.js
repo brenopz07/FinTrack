@@ -139,53 +139,53 @@ export default function Cadastro() {
       <Card dark={dark}>
         <View style={{ alignItems: "center" }}>
           <View style={{ alignItems: "center", gap: 5, paddingTop: 50 }}>
-            <SubTitulo dark={dark} style={{ textAlign: "center" }}>
+            <SubTitulo dark={!dark} style={{ textAlign: "center" }}>
               Seja bem vindo!
             </SubTitulo>
-            <MiniTexto dark={dark}>
+            <MiniTexto dark={!dark}>
               Se junte a nós e tenha controle do seu dinheiro.
             </MiniTexto>
           </View>
 
           <View style={{ paddingTop: 32, gap: 16 }}>
-            <LabelInput dark={dark}>
-              <MiniTexto dark={dark} style={{ marginBottom: -12 }}>Email</MiniTexto>
+            <LabelInput dark={!dark}>
+              <MiniTexto dark={!dark} style={{ marginBottom: -12 }}>Email</MiniTexto>
               <TextoInput
                 placeholder="Digite aqui"
                 value={email}
                 onChangeText={setEmail}
-                placeholderTextColor={!dark ? '#1E1E1E' : '#ffffff'}
-                style={{color:!dark ? '#1E1E1E' : '#f0f2f5'}}
+                placeholderTextColor={dark ? '#1E1E1E' : '#ffffff'}
+                style={{color:dark ? '#1E1E1E' : '#f0f2f5'}}
               ></TextoInput>
             </LabelInput>
 
-            <LabelInput dark={dark}>
-              <MiniTexto dark={dark} style={{ marginBottom: -12 }}>Nome</MiniTexto>
+            <LabelInput dark={!dark}>
+              <MiniTexto dark={!dark} style={{ marginBottom: -12 }}>Nome</MiniTexto>
               <TextoInput
                 placeholder="Digite aqui"
                 value={nome}
                 onChangeText={setNome}
-                placeholderTextColor={!dark ? '#1E1E1E' : '#ffffff'}
-                style={{color:!dark ? '#1E1E1E' : '#f0f2f5'}}
+                placeholderTextColor={dark ? '#1E1E1E' : '#ffffff'}
+                style={{color:dark ? '#1E1E1E' : '#f0f2f5'}}
               ></TextoInput>
             </LabelInput>
 
-            <LabelInput dark={dark}>
-              <MiniTexto dark={dark} style={{ marginBottom: -12 }}>Senha</MiniTexto>
+            <LabelInput dark={!dark}>
+              <MiniTexto dark={!dark} style={{ marginBottom: -12 }}>Senha</MiniTexto>
               <View style={{ flexDirection: "row" }}>
                 <TextoInput
                   placeholder="Digite aqui"
                   value={senha}
                   onChangeText={setSenha}
                   secureTextEntry={visualizarSenha}
-                  placeholderTextColor={!dark ? '#1E1E1E' : '#ffffff'}
-                  style={{color:!dark ? '#1E1E1E' : '#f0f2f5'}}
+                  placeholderTextColor={dark ? '#1E1E1E' : '#ffffff'}
+                  style={{color:dark ? '#1E1E1E' : '#f0f2f5'}}
                 ></TextoInput>
                 <TouchableOpacity
                   style={{ position: "absolute", right: 10 }}
                   onPressIn={mostrarSenha}
                   onPressOut={naoMostrarSenha}
-                  placeholderTextColor={!dark ? '#1E1E1E' : '#ffffff'}
+                  placeholderTextColor={dark ? '#1E1E1E' : '#ffffff'}
                   
                 >
                   <Image source={olho} style={{ marginTop: 0 }}></Image>
@@ -193,8 +193,8 @@ export default function Cadastro() {
               </View>
             </LabelInput>
 
-            <LabelInput dark={dark}>
-              <MiniTexto dark={dark} style={{ marginBottom: -12 }}>
+            <LabelInput dark={!dark}>
+              <MiniTexto dark={!dark} style={{ marginBottom: -12 }}>
                 Confirme a senha
               </MiniTexto>
               <View style={{ flexDirection: "row" }}>
@@ -203,8 +203,8 @@ export default function Cadastro() {
                   value={confirmaSenha}
                   onChangeText={setConfirmaSenha}
                   secureTextEntry={visualizarConfirmaSenha}
-                  placeholderTextColor={!dark ? '#1E1E1E' : '#ffffff'}
-                  style={{color:!dark ? '#1E1E1E' : '#f0f2f5'}}
+                  placeholderTextColor={dark ? '#1E1E1E' : '#ffffff'}
+                  style={{color:dark ? '#1E1E1E' : '#f0f2f5'}}
                 ></TextoInput>
                 <TouchableOpacity
                   style={{ position: "absolute", right: 10 }}
@@ -279,7 +279,7 @@ const Card = styled.View`
   padding-left: 30px;
   position: absolute;
   bottom: 0;
- background-color: ${({ dark }) => (dark ? '#1E1E1E' : '#ffffff')};
+ background-color: ${({ dark }) => (!dark ? '#1E1E1E' : '#ffffff')};
 `;
 const BackCard = styled.View`
   width: 320;
@@ -291,7 +291,7 @@ const BackCard = styled.View`
   position: absolute;
   bottom: 13;
   zindex: 0;
-   background-color: ${({ dark }) => (dark ? '#2C2C2CB2' : '#F0F2F580')};
+   background-color: ${({ dark }) => (!dark ? '#2C2C2CB2' : '#F0F2F580')};
 `;
 const BotaoLogin = styled.TouchableOpacity`
   width: 49;

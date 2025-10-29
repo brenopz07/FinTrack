@@ -22,16 +22,11 @@ export async function cadastrarUsuario({ name, email, password }) {
     }
   }
 
-  export async function editarNomeUsuario({ name, token }) {
+  export async function editarNomeUsuario({ name}) {
   try {
     const response = await api.put(
       "/users",
       { name },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
     );
     return response.data; // retorna o usuário atualizado
   } catch (error) {

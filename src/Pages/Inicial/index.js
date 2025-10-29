@@ -40,10 +40,10 @@ export default function Inicial(){
                 <View style={{alignItems:'center'}}>
                     <Image source={image2} style={{width:250, height:250}}></Image>
                     <View style={{alignItems:'center', gap:5}}>
-                        <MiniTexto dark={dark}>
+                        <MiniTexto dark={!dark}>
                             Pronto para comecar?
                         </MiniTexto>
-                        <SubTitulo dark={dark} style={{textAlign:'center'}}>
+                        <SubTitulo dark={!dark} style={{textAlign:'center'}}>
                             Tenha o controle total do seu dinheiro, sem complicações.
                         </SubTitulo>
                     </View>
@@ -92,7 +92,7 @@ padding-bottom: 20px;
 padding-left: 30px;
 position: absolute;
 bottom: 0;
-background-color: ${({ dark }) => (dark ? '#1E1E1E' : '#ffffff')};
+background-color: ${({ dark }) => (!dark ? '#1E1E1E' : '#ffffff')};
 `
 const BackCard = styled.View`
 width: 320;
@@ -106,5 +106,5 @@ marginBottom:30px;
 position:absolute;
 bottom:0;
 zIndex:0;
- background-color: ${({ dark }) => (dark ? '#2C2C2CB2' : '#F0F2F580')};
+ background-color: ${({ dark }) => (!dark ? '#2C2C2CB2' : '#F0F2F580')};
 `

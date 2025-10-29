@@ -115,39 +115,39 @@ export default function Login() {
             </View>
           </ContainerLogo>
 
-          <BackCard dark={dark} style={{ alignSelf: "center" }} />
-          <Card dark={dark}>
+          <BackCard dark={!dark} style={{ alignSelf: "center" }} />
+          <Card dark={!dark}>
             <View style={{ alignItems: "center" }}>
               <View style={{ alignItems: "center", gap: 5, paddingTop: 50 }}>
-                <SubTitulo dark={dark} style={{ textAlign: "center" }}>
+                <SubTitulo dark={!dark} style={{ textAlign: "center" }}>
                   Seja bem vindo de volta!
                 </SubTitulo>
-                <MiniTexto dark={dark}>Preencha as informações</MiniTexto>
+                <MiniTexto dark={!dark}>Preencha as informações</MiniTexto>
               </View>
 
               <View style={{ paddingTop: 32, gap: 16 }}>
-                <LabelInput dark={dark}>
-                  <MiniTexto dark={dark} style={{ marginBottom: -12 }}>Email</MiniTexto>
+                <LabelInput dark={!dark}>
+                  <MiniTexto dark={!dark} style={{ marginBottom: -12 }}>Email</MiniTexto>
                   <TextoInput
                     placeholder="Digite aqui"
                     value={email}
                     onChangeText={setEmail}
-                    placeholderTextColor={!dark ? "#1E1E1E" : "#ffffff"}
-                    style={{ color: !dark ? "#1E1E1E" : "#f0f2f5" }}
+                    placeholderTextColor={dark ? "#1E1E1E" : "#ffffff"}
+                    style={{ color: dark ? "#1E1E1E" : "#f0f2f5" }}
                   />
                 </LabelInput>
 
-                <LabelInput dark={dark}>
-                  <MiniTexto dark={dark} style={{ marginBottom: -12 }}>Senha</MiniTexto>
+                <LabelInput dark={!dark}>
+                  <MiniTexto dark={!dark} style={{ marginBottom: -12 }}>Senha</MiniTexto>
                   <View style={{ flexDirection: "row" }}>
                     <TextoInput
-                      dark={dark}
+                      dark={!dark}
                       placeholder="Digite aqui"
                       value={senha}
                       onChangeText={setSenha}
                       secureTextEntry={visualizarSenha}
-                      placeholderTextColor={!dark ? "#1E1E1E" : "#ffffff"}
-                      style={{ color: !dark ? "#1E1E1E" : "#f0f2f5" }}
+                      placeholderTextColor={dark ? "#1E1E1E" : "#ffffff"}
+                      style={{ color: dark ? "#1E1E1E" : "#f0f2f5" }}
                     />
                     <TouchableOpacity
                       style={{ position: "absolute", right: 10 }}
@@ -169,7 +169,7 @@ export default function Login() {
                   </View>
                 )}
 
-                <MiniTexto dark={dark} style={{ alignSelf: "flex-end" }}>Esqueceu a senha?</MiniTexto>
+                <MiniTexto dark={!dark} style={{ alignSelf: "flex-end" }}>Esqueceu a senha?</MiniTexto>
 
                 <BotaoGradientBackground>
                   <ButtonTouchable>
@@ -189,7 +189,7 @@ export default function Login() {
                       style={{ width: 12, height: 12, resizeMode: "contain", marginBottom: 1.8, marginLeft: 3 }}
                     />
                   </TouchableOpacity>
-                  <MiniTexto dark={dark}>Continuar conectado</MiniTexto>
+                  <MiniTexto dark={!dark}>Continuar conectado</MiniTexto>
                 </View>
               </View>
               <AppRoutes conectado={conectado} />
