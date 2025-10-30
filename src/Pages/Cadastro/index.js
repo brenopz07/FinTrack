@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { View, Image, TouchableOpacity, Alert } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Image, TouchableOpacity, Alert, Keyboard, Animated, Easing } from "react-native";
 import {
   Background,
   BotaoGradientBackground,
@@ -79,6 +79,35 @@ export default function Cadastro() {
       Alert.alert("Erro", msg);
     }
   };
+
+  const [translateY] = useState(new Animated.Value(0));
+
+  useEffect(() => {
+    const showSub = Keyboard.addListener("keyboardDidShow", (e) => {
+      Animated.timing(translateY, {
+        toValue: -e.endCoordinates.height / 3, // move o card pra cima metade da altura do teclado
+        duration: 250,
+        easing: Easing.out(Easing.ease),
+        useNativeDriver: true,
+      }).start();
+    });
+  
+    const hideSub = Keyboard.addListener("keyboardDidHide", () => {
+      Animated.timing(translateY, {
+        toValue: 0,
+        duration: 250,
+        easing: Easing.out(Easing.ease),
+        useNativeDriver: true,
+      }).start();
+    });
+  
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, []);
+  
+
   return (
     <Background>
       <View
@@ -136,9 +165,17 @@ export default function Cadastro() {
       </ContainerLogo>
 
       <BackCard dark={dark} style={{ alignSelf: "center" }}></BackCard>
+        <Animated.View
+             style={{
+              position:"absolute",
+              bottom:0,
+              right:0,
+              left:0,
+              transform: [{ translateY }],
+        }}>
       <Card dark={dark}>
         <View style={{ alignItems: "center" }}>
-          <View style={{ alignItems: "center", gap: 5, paddingTop: 50 }}>
+          <View style={{ alignItems: "center", gap: 5, paddingTop: 30 }}>
             <SubTitulo dark={!dark} style={{ textAlign: "center" }}>
               Seja bem vindo!
             </SubTitulo>
@@ -247,6 +284,7 @@ export default function Cadastro() {
           </View>
         </View>
       </Card>
+      </Animated.View>
     </Background>
   );
 }

@@ -281,7 +281,7 @@ export const Container = styled.View`
 
 export const Linha = styled.View`
   border-bottom-width: 1px;
-  border-color: black;
+ border-color: ${({ dark }) => (dark ? "#242222ff" : "#f0f2f5")};
 `;
 
 const CardModalUser = styled.View`
