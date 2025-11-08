@@ -6,6 +6,7 @@ import { Texto } from '../../Styleguide/styles';
 // Lista de meses (mantida aqui ou em um arquivo de constantes)
 export const meses = [
     "Geral",
+    "Nov/25",
     "Out/25",
     "Set/25",
     "Ago/25",
