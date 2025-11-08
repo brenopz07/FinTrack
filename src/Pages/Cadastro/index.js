@@ -85,7 +85,7 @@ export default function Cadastro() {
   useEffect(() => {
     const showSub = Keyboard.addListener("keyboardDidShow", (e) => {
       Animated.timing(translateY, {
-        toValue: -e.endCoordinates.height / 3, // move o card pra cima metade da altura do teclado
+        toValue: -e.endCoordinates.height / 1.2, // move o card pra cima metade da altura do teclado
         duration: 250,
         easing: Easing.out(Easing.ease),
         useNativeDriver: true,
