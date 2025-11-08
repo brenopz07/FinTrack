@@ -392,7 +392,8 @@ useEffect(() => {
               ></TextoInput>
             </SearchBar>
             
-            <TouchableOpacity>
+           
+            {/* <TouchableOpacity>
               <Image
                 source={filtro}
                 style={{
@@ -402,7 +403,8 @@ useEffect(() => {
                   marginBottom: 3,
                 }}
               ></Image>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
+            
           </ContainerSearch>
         )}
       </View>
@@ -536,7 +538,7 @@ const SearchBar = styled.View`
   border-color: #F0F2F5;
   padding-left: 12;
   gap: 12;
-  width: 78%;
+  width: 83%;
   margin-left: 30;
 `;
 
